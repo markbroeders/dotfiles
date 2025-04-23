@@ -16,6 +16,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("config.options")
+
 require("lazy").setup({
   spec = {
     { import = "plugins" },
@@ -24,4 +25,5 @@ require("lazy").setup({
   checker = { enabled = true },
 })
 
+require("config.mappings") -- After loading plugins!
 

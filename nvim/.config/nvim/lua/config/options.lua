@@ -1,3 +1,10 @@
+-- Sane defaults
+vim.opt.number = true
+vim.opt.mouse = 'a'
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+vim.opt.hlsearch = false
+
 vim.cmd("set expandtab")
 vim.cmd("set tabstop=2")
 vim.cmd("set softtabstop=2")
