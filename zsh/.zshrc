@@ -114,5 +114,8 @@ source $ZSH/oh-my-zsh.sh
 alias vim="nvim"
 alias ll="ls -all --color=auto"
 
+alias pacup="sudo pacman -Syu"
+alias yayup="yay -Syu"
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
