@@ -45,8 +45,9 @@
 theme = catppuccin-mocha
 # theme = GruvboxDark
 # font-family = Meslo LGS Nerd Font Mono
-font-family = CaskaydiaMono Nerd Font
+# font-family = CaskaydiaMono Nerd Font
 # font-family = CaskaydiaCove Nerd Font
+font-family = FiraCode Nerd Font
 font-size = 11
 background-opacity = 0.9
 gtk-titlebar = false
