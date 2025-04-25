@@ -1,4 +1,4 @@
-@import "atlas.css"; 
+@import "mocha.css"; 
 
 * {
     font-family: "MesloLGS Nerd Font Mono Bold";
@@ -10,7 +10,7 @@
 window#waybar {
     background: transparent;
     background-color: @crust;
-    color: @base06;
+    color: @overlay0;
     transition-property: background-color;
     transition-duration: 0.1s;
     border-bottom: 1px solid @overlay1;
@@ -30,8 +30,8 @@ button {
 
 button:hover {
     background: inherit;
-    color: @base06;
-    border-top: 2px solid @base06;
+    color: @mauve;
+    border-top: 2px solid @mauve;
 }
 
 #workspaces button {
@@ -40,14 +40,14 @@ button:hover {
 
 #workspaces button.focused {
     background-color: rgba(0, 0, 0, 0.3);
-    color: @base06;
-    border-top: 2px solid @base06;
+    color: @rosewater;
+    border-top: 2px solid @rosewater;
 }
 
 #workspaces button.active {
     background-color: rgba(0, 0, 0, 0.3);
-    color: @base06;
-    border-top: 2px solid @base06;
+    color: @mauve;
+    border-top: 2px solid @mauve;
 }
 
 #workspaces button.urgent {
@@ -76,8 +76,8 @@ button:hover {
 }
 
 #clock {
-    color: @base06;
-    border-bottom: 2px solid @base06;
+    color: @maroon;
+    border-bottom: 2px solid @maroon;
 }
 
 #clock.date {
@@ -86,13 +86,13 @@ button:hover {
 }
 
 #pulseaudio {
-    color: @base06;
-    border-bottom: 2px solid @base06;
+    color: @blue;
+    border-bottom: 2px solid @blue;
 }
 
 #network {
-    color: @base06;
-    border-bottom: 2px solid @base06;
+    color: @yellow;
+    border-bottom: 2px solid @yellow;
 }
 
 #idle_inhibitor {
@@ -105,13 +105,13 @@ button:hover {
 }
 
 #battery {
-    color: @base06;
-    border-bottom: 2px solid @base06;
+    color: @green;
+    border-bottom: 2px solid @green;
 }
 
 #tray {
-    color: @base06;
-    border-bottom: 2px solid @base06;
+    color: @teal;
+    border-bottom: 2px solid @teal;
 }
 
 /* If workspaces is the leftmost module, omit left margin */
@@ -125,7 +125,7 @@ button:hover {
 }
 
 #custom-vpn {
-    color: @base01;
+    color: @lavender;
     border-radius: 15px;
     padding-left: 6px;
     padding-right: 6px;
