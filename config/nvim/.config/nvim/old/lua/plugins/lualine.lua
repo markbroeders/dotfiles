@@ -1,5 +1,3 @@
--- Nice status line for neovim
-
 return {
   "nvim-lualine/lualine.nvim",
   config = function()

@@ -15,10 +15,8 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- Load default options
-require("config.defaults")
+require("config.options")
 
--- Load plugins
 require("lazy").setup({
   spec = {
     { import = "plugins" },
@@ -27,7 +25,5 @@ require("lazy").setup({
   checker = { enabled = true },
 })
 
--- Set up keyboard mappings
--- Make sure this is loaded AFTER loading plugins because most, if not all, mappings rely
--- on plugins
-require("config.mappings")
+require("config.mappings") -- After loading plugins!
+
