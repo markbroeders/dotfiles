@@ -1,0 +1,66 @@
+[ERROR zo 04 mei 2025 20:30:13 CEST] ...m/lazy/mason-lspconfig.nvim/lua/mason-lspconfig/init.lua:33: Failed to set up lspconfig integration. ...on-lspconfig.nvim/lua/mason-lspconfig/lspconfig_hook.lua:56: module 'lspconfig.util' not found:
+	no field package.preload['lspconfig.util']
+	cache_loader: module 'lspconfig.util' not found
+	cache_loader_lib: module 'lspconfig.util' not found
+	no file './lspconfig/util.lua'
+	no file '/usr/share/luajit-2.1/lspconfig/util.lua'
+	no file '/usr/local/share/lua/5.1/lspconfig/util.lua'
+	no file '/usr/local/share/lua/5.1/lspconfig/util/init.lua'
+	no file '/usr/share/lua/5.1/lspconfig/util.lua'
+	no file '/usr/share/lua/5.1/lspconfig/util/init.lua'
+	no file '/home/mark/.local/share/nvim/lazy-rocks/telescope.nvim/share/lua/5.1/lspconfig/util.lua'
+	no file '/home/mark/.local/share/nvim/lazy-rocks/telescope.nvim/share/lua/5.1/lspconfig/util/init.lua'
+	no file './lspconfig/util.so'
+	no file '/usr/local/lib/lua/5.1/lspconfig/util.so'
+	no file '/usr/lib/lua/5.1/lspconfig/util.so'
+	no file '/usr/local/lib/lua/5.1/loadall.so'
+	no file '/home/mark/.local/share/nvim/lazy-rocks/telescope.nvim/lib/lua/5.1/lspconfig/util.so'
+	no file '/home/mark/.local/share/nvim/lazy-rocks/telescope.nvim/lib64/lua/5.1/lspconfig/util.so'
+	no file './lspconfig.so'
+	no file '/usr/local/lib/lua/5.1/lspconfig.so'
+	no file '/usr/lib/lua/5.1/lspconfig.so'
+	no file '/usr/local/lib/lua/5.1/loadall.so'
+	no file '/home/mark/.local/share/nvim/lazy-rocks/telescope.nvim/lib/lua/5.1/lspconfig.so'
+	no file '/home/mark/.local/share/nvim/lazy-rocks/telescope.nvim/lib64/lua/5.1/lspconfig.so'
+[INFO  zo 04 mei 2025 20:30:13 CEST] ...e/nvim/lazy/mason.nvim/lua/mason-core/installer/init.lua:184: Executing installer for Package(name=lua-language-server) {}
+[ERROR zo 04 mei 2025 20:30:19 CEST] ...zy/mason.nvim/lua/mason-core/installer/registry/init.lua:186: Failed to download schemas Package(name=lua-language-server) Schema download timed out.
+[INFO  zo 04 mei 2025 20:30:19 CEST] ...e/nvim/lazy/mason.nvim/lua/mason-core/installer/init.lua:245: Installation succeeded for Package(name=lua-language-server)
+[INFO  ma 05 mei 2025 14:30:27 CEST] ...e/nvim/lazy/mason.nvim/lua/mason-core/installer/init.lua:184: Executing installer for Package(name=typescript-language-server) {}
+[ERROR ma 05 mei 2025 14:30:27 CEST] ...e/nvim/lazy/mason.nvim/lua/mason-core/installer/init.lua:249: Installation failed for Package(name=typescript-language-server) error=spawn: npm failed with exit code - and signal -. npm is not executable
+[INFO  ma 05 mei 2025 14:33:34 CEST] ...e/nvim/lazy/mason.nvim/lua/mason-core/installer/init.lua:184: Executing installer for Package(name=typescript-language-server) {}
+[ERROR ma 05 mei 2025 14:33:34 CEST] ...e/nvim/lazy/mason.nvim/lua/mason-core/installer/init.lua:249: Installation failed for Package(name=typescript-language-server) error=spawn: npm failed with exit code - and signal -. npm is not executable
+[INFO  ma 05 mei 2025 14:36:05 CEST] ...e/nvim/lazy/mason.nvim/lua/mason-core/installer/init.lua:184: Executing installer for Package(name=typescript-language-server) {}
+[ERROR ma 05 mei 2025 14:36:05 CEST] ...e/nvim/lazy/mason.nvim/lua/mason-core/installer/init.lua:249: Installation failed for Package(name=typescript-language-server) error=spawn: npm failed with exit code - and signal -. npm is not executable
+[INFO  ma 05 mei 2025 14:36:22 CEST] ...e/nvim/lazy/mason.nvim/lua/mason-core/installer/init.lua:184: Executing installer for Package(name=typescript-language-server) {}
+[ERROR ma 05 mei 2025 14:36:22 CEST] ...e/nvim/lazy/mason.nvim/lua/mason-core/installer/init.lua:249: Installation failed for Package(name=typescript-language-server) error=spawn: npm failed with exit code - and signal -. npm is not executable
+[INFO  ma 05 mei 2025 14:37:00 CEST] ...e/nvim/lazy/mason.nvim/lua/mason-core/installer/init.lua:184: Executing installer for Package(name=typescript-language-server) {}
+[INFO  ma 05 mei 2025 14:37:01 CEST] ...e/nvim/lazy/mason.nvim/lua/mason-core/installer/init.lua:245: Installation succeeded for Package(name=typescript-language-server)
+[INFO  ma 05 mei 2025 19:26:24 CEST] ...e/nvim/lazy/mason.nvim/lua/mason-core/installer/init.lua:184: Executing installer for Package(name=stylua) {}
+[INFO  ma 05 mei 2025 19:26:25 CEST] ...e/nvim/lazy/mason.nvim/lua/mason-core/installer/init.lua:245: Installation succeeded for Package(name=stylua)
+[INFO  ma 05 mei 2025 19:30:16 CEST] ...e/nvim/lazy/mason.nvim/lua/mason-core/installer/init.lua:184: Executing installer for Package(name=prettier) {}
+[INFO  ma 05 mei 2025 19:30:17 CEST] ...e/nvim/lazy/mason.nvim/lua/mason-core/installer/init.lua:245: Installation succeeded for Package(name=prettier)
+[INFO  ma 05 mei 2025 19:30:32 CEST] ...e/nvim/lazy/mason.nvim/lua/mason-core/installer/init.lua:184: Executing installer for Package(name=eslint_d) {}
+[INFO  ma 05 mei 2025 19:30:36 CEST] ...e/nvim/lazy/mason.nvim/lua/mason-core/installer/init.lua:245: Installation succeeded for Package(name=eslint_d)
+[INFO  ma 05 mei 2025 19:31:09 CEST] ...e/nvim/lazy/mason.nvim/lua/mason-core/installer/init.lua:184: Executing installer for Package(name=black) {}
+[INFO  ma 05 mei 2025 19:31:12 CEST] ...e/nvim/lazy/mason.nvim/lua/mason-core/installer/init.lua:245: Installation succeeded for Package(name=black)
+[INFO  ma 05 mei 2025 19:31:12 CEST] ...e/nvim/lazy/mason.nvim/lua/mason-core/installer/init.lua:184: Executing installer for Package(name=isort) {}
+[INFO  ma 05 mei 2025 19:31:15 CEST] ...e/nvim/lazy/mason.nvim/lua/mason-core/installer/init.lua:245: Installation succeeded for Package(name=isort)
+[INFO  ma 05 mei 2025 21:04:15 CEST] ...e/nvim/lazy/mason.nvim/lua/mason-core/installer/init.lua:184: Executing installer for Package(name=pyright) {}
+[INFO  ma 05 mei 2025 21:04:18 CEST] ...e/nvim/lazy/mason.nvim/lua/mason-core/installer/init.lua:245: Installation succeeded for Package(name=pyright)
+[ERROR wo 07 mei 2025 13:58:25 CEST] ...al/share/nvim/lazy/mason.nvim/lua/mason-core/process.lua:225: Failed to spawn process. cmd="cargo", err="ENOENT: no such file or directory"
+[ERROR wo 07 mei 2025 13:58:25 CEST] ...al/share/nvim/lazy/mason.nvim/lua/mason-core/process.lua:225: Failed to spawn process. cmd="luarocks", err="ENOENT: no such file or directory"
+[ERROR wo 07 mei 2025 13:58:25 CEST] ...al/share/nvim/lazy/mason.nvim/lua/mason-core/process.lua:225: Failed to spawn process. cmd="ruby", err="ENOENT: no such file or directory"
+[ERROR wo 07 mei 2025 13:58:25 CEST] ...al/share/nvim/lazy/mason.nvim/lua/mason-core/process.lua:225: Failed to spawn process. cmd="gem", err="ENOENT: no such file or directory"
+[ERROR wo 07 mei 2025 13:58:25 CEST] ...al/share/nvim/lazy/mason.nvim/lua/mason-core/process.lua:225: Failed to spawn process. cmd="composer", err="ENOENT: no such file or directory"
+[ERROR wo 07 mei 2025 13:58:25 CEST] ...al/share/nvim/lazy/mason.nvim/lua/mason-core/process.lua:225: Failed to spawn process. cmd="php", err="ENOENT: no such file or directory"
+[ERROR wo 07 mei 2025 13:58:25 CEST] ...al/share/nvim/lazy/mason.nvim/lua/mason-core/process.lua:225: Failed to spawn process. cmd="javac", err="ENOENT: no such file or directory"
+[ERROR wo 07 mei 2025 13:58:25 CEST] ...al/share/nvim/lazy/mason.nvim/lua/mason-core/process.lua:225: Failed to spawn process. cmd="java", err="ENOENT: no such file or directory"
+[ERROR wo 07 mei 2025 13:58:25 CEST] ...al/share/nvim/lazy/mason.nvim/lua/mason-core/process.lua:225: Failed to spawn process. cmd="julia", err="ENOENT: no such file or directory"
+[ERROR wo 07 mei 2025 13:59:09 CEST] ...al/share/nvim/lazy/mason.nvim/lua/mason-core/process.lua:225: Failed to spawn process. cmd="cargo", err="ENOENT: no such file or directory"
+[ERROR wo 07 mei 2025 13:59:09 CEST] ...al/share/nvim/lazy/mason.nvim/lua/mason-core/process.lua:225: Failed to spawn process. cmd="ruby", err="ENOENT: no such file or directory"
+[ERROR wo 07 mei 2025 13:59:09 CEST] ...al/share/nvim/lazy/mason.nvim/lua/mason-core/process.lua:225: Failed to spawn process. cmd="gem", err="ENOENT: no such file or directory"
+[ERROR wo 07 mei 2025 13:59:09 CEST] ...al/share/nvim/lazy/mason.nvim/lua/mason-core/process.lua:225: Failed to spawn process. cmd="composer", err="ENOENT: no such file or directory"
+[ERROR wo 07 mei 2025 13:59:09 CEST] ...al/share/nvim/lazy/mason.nvim/lua/mason-core/process.lua:225: Failed to spawn process. cmd="php", err="ENOENT: no such file or directory"
+[ERROR wo 07 mei 2025 13:59:09 CEST] ...al/share/nvim/lazy/mason.nvim/lua/mason-core/process.lua:225: Failed to spawn process. cmd="javac", err="ENOENT: no such file or directory"
+[ERROR wo 07 mei 2025 13:59:09 CEST] ...al/share/nvim/lazy/mason.nvim/lua/mason-core/process.lua:225: Failed to spawn process. cmd="java", err="ENOENT: no such file or directory"
+[ERROR wo 07 mei 2025 13:59:09 CEST] ...al/share/nvim/lazy/mason.nvim/lua/mason-core/process.lua:225: Failed to spawn process. cmd="julia", err="ENOENT: no such file or directory"

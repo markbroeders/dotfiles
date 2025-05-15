@@ -1,0 +1,47 @@
+[START][2025-05-07 10:27:30] LSP logging initiated
+[WARN][2025-05-07 10:27:30] .../lua/vim/lsp.lua:411	"haxe_language_server does not have a configuration"
+[WARN][2025-05-07 10:27:30] .../lua/vim/lsp.lua:411	"jsonnet_ls does not have a configuration"
+[WARN][2025-05-07 10:27:30] .../lua/vim/lsp.lua:411	"glint does not have a configuration"
+[WARN][2025-05-07 10:27:30] .../lua/vim/lsp.lua:411	"codeqlls does not have a configuration"
+[WARN][2025-05-07 10:27:30] .../lua/vim/lsp.lua:411	"matlab_ls does not have a configuration"
+[WARN][2025-05-07 10:27:30] .../lua/vim/lsp.lua:411	"sourcery does not have a configuration"
+[WARN][2025-05-07 10:27:30] .../lua/vim/lsp.lua:411	"haxe_language_server does not have a configuration"
+[WARN][2025-05-07 10:27:30] .../lua/vim/lsp.lua:411	"jsonnet_ls does not have a configuration"
+[WARN][2025-05-07 10:27:30] .../lua/vim/lsp.lua:411	"glint does not have a configuration"
+[WARN][2025-05-07 10:27:30] .../lua/vim/lsp.lua:411	"codeqlls does not have a configuration"
+[WARN][2025-05-07 10:27:30] .../lua/vim/lsp.lua:411	"matlab_ls does not have a configuration"
+[WARN][2025-05-07 10:27:30] .../lua/vim/lsp.lua:411	"sourcery does not have a configuration"
+[START][2025-05-07 10:30:52] LSP logging initiated
+[WARN][2025-05-07 10:30:52] .../lua/vim/lsp.lua:411	"glint does not have a configuration"
+[WARN][2025-05-07 10:30:52] .../lua/vim/lsp.lua:411	"matlab_ls does not have a configuration"
+[WARN][2025-05-07 10:30:52] .../lua/vim/lsp.lua:411	"codeqlls does not have a configuration"
+[WARN][2025-05-07 10:30:52] .../lua/vim/lsp.lua:411	"sourcery does not have a configuration"
+[WARN][2025-05-07 10:30:52] .../lua/vim/lsp.lua:411	"jsonnet_ls does not have a configuration"
+[WARN][2025-05-07 10:30:52] .../lua/vim/lsp.lua:411	"haxe_language_server does not have a configuration"
+[WARN][2025-05-07 10:30:52] .../lua/vim/lsp.lua:411	"glint does not have a configuration"
+[WARN][2025-05-07 10:30:52] .../lua/vim/lsp.lua:411	"matlab_ls does not have a configuration"
+[WARN][2025-05-07 10:30:52] .../lua/vim/lsp.lua:411	"codeqlls does not have a configuration"
+[WARN][2025-05-07 10:30:52] .../lua/vim/lsp.lua:411	"sourcery does not have a configuration"
+[WARN][2025-05-07 10:30:52] .../lua/vim/lsp.lua:411	"jsonnet_ls does not have a configuration"
+[WARN][2025-05-07 10:30:52] .../lua/vim/lsp.lua:411	"haxe_language_server does not have a configuration"
+[WARN][2025-05-07 10:32:45] .../lua/vim/lsp.lua:52	"method textDocument/declaration is not supported by any of the servers registered for the current buffer"
+[START][2025-05-07 13:52:44] LSP logging initiated
+[ERROR][2025-05-07 13:52:44] ...lsp/handlers.lua:562	'File or directory "/<default workspace root>" does not exist.'
+[START][2025-05-07 22:01:53] LSP logging initiated
+[ERROR][2025-05-07 22:01:53] ...lsp/handlers.lua:562	'File or directory "/<default workspace root>" does not exist.'
+[START][2025-05-07 22:03:25] LSP logging initiated
+[ERROR][2025-05-07 22:03:25] ...lsp/handlers.lua:562	'File or directory "/<default workspace root>" does not exist.'
+[START][2025-05-08 13:12:06] LSP logging initiated
+[ERROR][2025-05-08 13:12:06] ...lsp/handlers.lua:562	'File or directory "/<default workspace root>" does not exist.'
+[START][2025-05-08 20:44:49] LSP logging initiated
+[ERROR][2025-05-08 20:44:49] ...lsp/handlers.lua:562	'File or directory "/<default workspace root>" does not exist.'
+[START][2025-05-09 15:30:35] LSP logging initiated
+[ERROR][2025-05-09 15:30:35] ...lsp/handlers.lua:562	'File or directory "/<default workspace root>" does not exist.'
+[START][2025-05-09 16:13:04] LSP logging initiated
+[ERROR][2025-05-09 16:13:04] ...lsp/handlers.lua:562	'File or directory "/<default workspace root>" does not exist.'
+[START][2025-05-09 21:07:05] LSP logging initiated
+[ERROR][2025-05-09 21:07:05] ...lsp/handlers.lua:562	'File or directory "/<default workspace root>" does not exist.'
+[START][2025-05-10 19:45:13] LSP logging initiated
+[ERROR][2025-05-10 19:45:13] ...lsp/handlers.lua:562	'File or directory "/<default workspace root>" does not exist.'
+[START][2025-05-12 09:54:19] LSP logging initiated
+[ERROR][2025-05-12 09:54:19] ...lsp/handlers.lua:562	'File or directory "/<default workspace root>" does not exist.'
