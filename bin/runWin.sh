@@ -12,16 +12,23 @@ qemu-system-x86_64 \
     -drive if=pflash,format=raw,file=/home/mark/Machines/OVMF_VARS_4M.secboot.fd \
     -enable-kvm -machine q35 \
     -cpu host -smp 4 -m 8G \
-    -drive file=/home/mark/Downloads/Win11_24H2_Dutch_x64.iso,media=cdrom,if=none,id=cd0 \
-    -device ide-cd,drive=cd0,bootindex=0 \
-    -drive file=/home/mark/Downloads/virtio-win-0.1.271.iso,media=cdrom \
-    -drive file=/home/mark/Machines/win11.qcow2,format=qcow2, \
+    -drive file=/home/mark/Machines/win11.qcow2,format=qcow2 \
+    -vga virtio \
+    -display sdl,gl=on \
+    -nic user,model=e1000 \
+    -usb -device usb-tablet
+
+
+
 #    -drive file=/home/mark/Machines/win11.qcow2,if=none,id=disk0,format=qcow2 \
 #    -device virtio-blk-pci,drive=disk0,bootindex=1 \
+
+#    -device virtio-vga-gl \
+#    -device ide-cd,drive=cd0,bootindex=0 \
+#    -drive file=/home/mark/Downloads/virtio-win-0.1.271.iso,media=cdrom \
+#    -drive file=/home/mark/Machines/win11.qcow2,format=qcow2, \
+#
 #    -drive file=/home/mark/Machines/win11.qcow2,if=none,id=disk0 \
 #    -device achi,id=achi0
 #    -device ide-hd,drive=disk0,bootindex=1,bus=achi0.0 \
-    -display sdl,gl=on,full-screen=on \
-    -vga std \
-    -nic user,model=e1000
-
+# for cdrom    -vga std \
