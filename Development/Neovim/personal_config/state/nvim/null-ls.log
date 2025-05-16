@@ -1,3 +1,0 @@
-[WARN  ma 05 mei 2025 19:24:59 CEST] /home/mark/.local/share/nvim/lazy/none-ls.nvim/lua/null-ls/builtins/init.lua:17: failed to load builtin stylelua for method formatting; please check your config
-[WARN  ma 05 mei 2025 20:24:25 CEST] /home/mark/.local/share/nvim/lazy/none-ls.nvim/lua/null-ls/builtins/init.lua:32: failed to load builtin table for method fomatting; please check your config
-[WARN  ma 05 mei 2025 20:25:30 CEST] /home/mark/.local/share/nvim/lazy/none-ls.nvim/lua/null-ls/builtins/init.lua:17: failed to load builtin eslint_d for method diagnostics; please check your config

@@ -1,1 +1,0 @@
-{"schema_version":"1.1","links":{"share":{},"bin":{"lua-language-server":"lua-language-server"},"opt":{}},"primary_source":{"type":"registry+v1","id":"pkg:github/luals/lua-language-server@3.14.0"},"name":"lua-language-server","metrics":{"completion_time":1746383419185,"start_time":1746383413248},"secondary_sources":[]}
