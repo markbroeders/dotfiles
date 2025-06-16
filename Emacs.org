@@ -12,7 +12,7 @@ Let's start with the header and opening of the file. I'm not sure why this needs
 #+begin_src emacs-lisp
   ;;; init.el --- My Personal Emacs Configuration -*- lexical-binding: t; -*-
   ;;; tangled from Emacs.org
-  
+
 #+end_src
 
 ** Emacs-Kick Guide
@@ -93,7 +93,7 @@ So we bootstrap it here.
     "Configuration for using Nerd Fonts Symbols."
     :type 'boolean
     :group 'appearance)
-  
+
 #+end_src
 
 From now on, you'll see configurations using the `use-package` macro, which allows us to organize our Emacs setup in a modular way. These configurations look like this:
@@ -139,6 +139,7 @@ Here are some sane default settings, read the comments to see what they all mean
     (use-dialog-box nil)                            ;; Disable dialog boxes in favor of minibuffer prompts.
     (use-short-answers t)                           ;; Use short answers in prompts for quicker responses (y instead of yes)
     (warning-minimum-level :emergency)              ;; Set the minimum level of warnings to display.
+    (split-width-threshold 120)                     ;; Make new windows open to the right
 
     :hook                                           ;; Add hooks to enable specific features in certain modes.
     (prog-mode . display-line-numbers-mode)         ;; Enable line numbers in programming modes.
@@ -206,7 +207,7 @@ Here are some sane default settings, read the comments to see what they all mean
   "
                            (emacs-init-time)
                            (number-to-string (length package-activated-list))))))))
-  
+
 #+end_src
 
 ** UI
@@ -248,7 +249,7 @@ This section configures window management in Emacs, enhancing the way buffers ar
         (side . bottom)
         (slot . 1))
        )))
-  
+
 #+end_src
 
 *** Theme
@@ -275,7 +276,7 @@ with soft colors that are easy on the eyes.
 
     ;; Load the Catppuccin theme without prompting for confirmation.
     (load-theme 'catppuccin :no-confirm))
-  
+
 #+end_src
 
 *** Modeline
@@ -298,7 +299,7 @@ The `doom-modeline' package provides a sleek, modern mode-line that is visually 
       (setq doom-modeline-icon nil))                     ;; Disable icons if nerd fonts are not being used.
     :hook
     (after-init . doom-modeline-mode))
-  
+
 #+end_src
 
 *** Clipboard
@@ -313,7 +314,7 @@ in Emacs can be pasted in other applications, and vice versa, providing a smooth
     :defer t
     :hook
     (after-init . xclip-mode))     ;; Enable xclip mode after initialization.
-  
+
 #+end_src
 
 *** Indentation
@@ -329,7 +330,7 @@ The `indent-guide' package provides visual indicators for indentation levels in 
     (prog-mode . indent-guide-mode)  ;; Activate indent-guide in programming modes.
     :config
     (setq indent-guide-char "│"))    ;; Set the character used for the indent guide.
-  
+
 #+end_src
 
 *** Nerd Icons
@@ -365,7 +366,7 @@ The `nerd-icons-completion' package enhances the completion interfaces in Emacs 
     :config
     (nerd-icons-completion-mode)            ;; Activate nerd icons for completion interfaces.
     (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup)) ;; Setup icons in the marginalia mode for enhanced completion display.
-  
+
 #+end_src
 
 *** Pulsar for visual feedback
@@ -396,7 +397,7 @@ actions such as scrolling, error navigation, yanking, deleting, and jumping to d
     (add-to-list 'pulsar-pulse-functions 'evil-jump-item)
     (add-to-list 'pulsar-pulse-functions 'diff-hl-next-hunk)
     (add-to-list 'pulsar-pulse-functions 'diff-hl-previous-hunk))
-  
+
 #+end_src
 
 *** Rainbow Delimiters
@@ -410,7 +411,7 @@ The `rainbow-delimiters' package provides colorful parentheses, brackets, and br
     :ensure t
     :hook
     (prog-mode . rainbow-delimiters-mode))
-  
+
 #+end_src
 
 ** Keyboard
@@ -451,7 +452,7 @@ The `evil' package provides Vim emulation within Emacs, allowing users to edit t
 
     ;; Basic find command
     (evil-define-key 'normal 'global (kbd "<leader> f f") 'find-file)
-    
+
     ;; Flymake navigation
     (evil-define-key 'normal 'global (kbd "<leader> x x") 'consult-flymake);; Gives you something like `trouble.nvim'
     (evil-define-key 'normal 'global (kbd "] d") 'flymake-goto-next-error) ;; Go to next Flymake error
@@ -571,7 +572,22 @@ The `evil' package provides Vim emulation within Emacs, allowing users to edit t
 
     ;; Enable evil mode
     (evil-mode 1))
-  
+
+#+end_src
+
+There is the problem that the cursor doesn't change according to state on terminal. And i do find it convenient to display the cursor by default as box, but change it to bar when in input mode. Therefore, we install the following package and enable it when not using the graphical version.
+
+#+begin_src emacs-lisp
+
+  (use-package evil-terminal-cursor-changer
+    :ensure t
+    :straight t
+    :config
+      (unless (display-graphic-p)
+        (require 'evil-terminal-cursor-changer)
+        (evil-terminal-cursor-changer-activate) ; or (etcc-on)
+        ))
+
 #+end_src
 
 The `evil-collection' package enhances the integration of `evil-mode' with various built-in and third-party packages. It provides a better modal experience by remapping keybindings and commands to fit the `evil' style.
@@ -587,7 +603,7 @@ The `evil-collection' package enhances the integration of `evil-mode' with vario
     ;; Hook to initialize `evil-collection' when `evil-mode' is activated.
     :hook
     (evil-mode . evil-collection-init))
-  
+
 #+end_src
 
 The `evil-surround' package provides text object surround functionality for `evil-mode'. This allows for easily adding, changing, or deleting surrounding characters such as parentheses, quotes, and more.
@@ -604,7 +620,7 @@ More examples here:
     :after evil-collection
     :config
     (global-evil-surround-mode 1))
-  
+
 #+end_src
 
 The `evil-matchit' package extends `evil-mode' by enabling text object matching for structures such as parentheses, HTML tags, and other paired delimiters. This makes it easier to navigate and manipulate code blocks.
@@ -618,7 +634,7 @@ Just use % for jumping between matching structures to check it out.
     :after evil-collection
     :config
     (global-evil-matchit-mode 1))
-  
+
 #+end_src
 
 *** Which key
@@ -632,7 +648,7 @@ Emacs and improve your workflow. It helps users remember key combinations and re
     :defer t        ;; Defer loading Which-Key until after init.
     :hook
     (after-init . which-key-mode)) ;; Enable which-key mode after initialization.
-  
+
 #+end_src
 
 *** Undo Tree
@@ -660,7 +676,7 @@ The `undo-tree' package provides an advanced and visual way to manage undo histo
     ;; Set the directory where `undo-tree' will save its history files.
     ;; This keeps undo history across sessions, stored in a cache directory.
     (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/.cache/undo"))))
-  
+
 #+end_src
 
 ** File Management
@@ -711,7 +727,7 @@ This configuration customizes `dired' to enhance its usability. The settings bel
 - =d= - Mark file for deletion
 - =x= - Execute deletion for marks
 - =delete-by-moving-to-trash= - Move to trash instead of deleting permanently
-  
+
 ***** Creating and extracting archives
 
 - =Z= - Compress or uncompress a file or folder to (=.tar.gz=)
@@ -746,7 +762,7 @@ This configuration customizes `dired' to enhance its usability. The settings bel
       (let ((gls (executable-find "gls")))                     ;; Use GNU ls on macOS if available.
         (when gls
           (setq insert-directory-program gls)))))
-  
+
 #+end_src
 
 *** Neotree
@@ -766,7 +782,7 @@ The `neotree' package provides a file tree explorer for Emacs, allowing easy nav
     (if ek-use-nerd-fonts                    ;; Check if nerd fonts are being used.
         (setq neo-theme 'nerd-icons)         ;; Set the theme to 'nerd-icons' if nerd fonts are available.
       (setq neo-theme 'nerd)))               ;; Otherwise, fall back to the 'nerd' theme.
-  
+
 #+end_src
 
 ** Completion Framework
@@ -802,7 +818,7 @@ In minibuffer completion, such as when entering commands or file paths, Vertico 
                        (propertize "» " 'face '(:foreground "#80adf0" :weight bold))
                      "  ")
                    cand))))
-  
+
 #+end_src
 
 *** Orderless
@@ -819,7 +835,7 @@ Orderless enhances completion in Emacs by allowing flexible pattern matching. It
     (setq completion-styles '(orderless basic)  ;; Set the completion styles.
           completion-category-defaults nil      ;; Clear default category settings.
           completion-category-overrides '((file (styles partial-completion))))) ;; Customize file completion styles.
-  
+
 #+end_src
 
 *** Marginalia
@@ -832,7 +848,7 @@ Marginalia enhances the completion experience in Emacs by adding additional cont
     :straight t
     :hook
     (after-init . marginalia-mode))
-  
+
 #+end_src
 
 *** Consult
@@ -852,7 +868,7 @@ navigating buffers, files, and xrefs with ease.
     ;; Use Consult for xref locations with a preview feature.
     (setq xref-show-xrefs-function #'consult-xref
           xref-show-definitions-function #'consult-xref))
-  
+
 #+end_src
 
 *** Embark
@@ -875,7 +891,7 @@ Embark-Consult provides a bridge between Embark and Consult, ensuring that Consu
     :straight t
     :hook
     (embark-collect-mode . consult-preview-at-point-mode)) ;; Enable preview in Embark collect mode.
-  
+
 #+end_src
 
 *** Company
@@ -883,30 +899,41 @@ Company Mode provides a text completion framework for Emacs. It enhances the edi
 
 #+begin_src emacs-lisp
 
-  (use-package company
-    :defer t
-    :straight t
-    :ensure t
-    :custom
-    (company-tooltip-align-annotations t)      ;; Align annotations with completions.
-    (company-minimum-prefix-length 1)          ;; Trigger completion after typing 1 character
-    (company-idle-delay 0.2)                   ;; Delay before showing completion (adjust as needed)
-    (company-tooltip-maximum-width 50)
-    :config
+    (use-package company
+      :defer t
+      :straight t
+      :ensure t
+      :custom
+      (company-tooltip-align-annotations t)      ;; Align annotations with completions.
+      (company-minimum-prefix-length 1)          ;; Trigger completion after typing 1 character
+      (company-idle-delay 0.2)                   ;; Delay before showing completion (adjust as needed)
+      (company-tooltip-maximum-width 50)
+      :config
 
-    ;; While using C-p C-n to select a completion candidate
-    ;; C-y quickly shows help docs for the current candidate
-    (define-key company-active-map (kbd "C-y")
-                (lambda ()
-                  (interactive)
-                  (company-show-doc-buffer)))
-    (define-key company-active-map [tab] 'company-complete-selection)
-    (define-key company-active-map (kbd "TAB") 'company-complete-selection)
-    (define-key company-active-map [ret] 'company-complete-selection)
-    (define-key company-active-map (kbd "RET") 'company-complete-selection)
-    :hook
-    (after-init . global-company-mode)) ;; Enable Company Mode globally after initialization.
-  
+      ;; While using C-p C-n to select a completion candidate
+      ;; C-y quickly shows help docs for the current candidate
+      (define-key company-active-map (kbd "C-y")
+                  (lambda ()
+                    (interactive)
+                    (company-show-doc-buffer)))
+      (define-key company-active-map [tab] 'company-complete-selection)
+      (define-key company-active-map (kbd "TAB") 'company-complete-selection)
+      (define-key company-active-map [ret] 'company-complete-selection)
+      (define-key company-active-map (kbd "RET") 'company-complete-selection)
+      :hook
+      (after-init . global-company-mode)) ;; Enable Company Mode globally after initialization.
+
+    ;; Disable company for some modes
+    (dolist (mode '(org-mode-hook
+                org-agenda-mode-hook
+                term-mode-hook
+                shell-mode-hook
+                vterm-mode-hook
+                eshell-mode-hook
+text-mode-hook))
+
+    (add-hook mode (lambda () (company-mode 0))))
+
 #+end_src
 
 ** Programming
@@ -929,7 +956,7 @@ NOTE: To install or reinstall an LSP server, use `M-x install-server RET`.
     :defer t
     :hook (;; Replace XXX-mode with concrete major mode (e.g. python-mode)
            (bash-ts-mode . lsp)                           ;; Enable LSP for Bash
-  		 (python-mode . lsp)                            ;; Enable Python
+                 (python-mode . lsp)                            ;; Enable Python
            (typescript-ts-mode . lsp)                     ;; Enable LSP for TypeScript
            (tsx-ts-mode . lsp)                            ;; Enable LSP for TSX
            (js-mode . lsp)                                ;; Enable LSP for JavaScript
@@ -977,7 +1004,7 @@ NOTE: To install or reinstall an LSP server, use `M-x install-server RET`.
     (lsp-headerline-breadcrumb-icons-enable nil)          ;; Disable icons in breadcrumb.
     ;; Semantic settings
     (lsp-semantic-tokens-enable nil))                     ;; Disable semantic tokens.
-  
+
 #+end_src
 
 *** Documentation
@@ -989,7 +1016,7 @@ Eldoc provides helpful inline documentation for functions and variables in the m
     :ensure nil          ;; This is built-in, no need to fetch it.
     :init
     (global-eldoc-mode))
-  
+
 #+end_src
 *** Syntax
 **** Flymake
@@ -1005,7 +1032,7 @@ Flymake is an on-the-fly syntax checking extension that provides real-time feedb
     (flymake-margin-indicators-string
      '((error "!»" compilation-error) (warning "»" compilation-warning)
        (note "»" compilation-info))))
-  
+
 #+end_src
 
 **** Treesitter-auto
@@ -1022,7 +1049,7 @@ Treesit-auto simplifies the use of Tree-sitter grammars in Emacs, providing auto
     :config
     (treesit-auto-add-to-auto-mode-alist 'all)
     (global-treesit-auto-mode t))
-  
+
 #+end_src
 
 *** Languages
@@ -1039,7 +1066,7 @@ You can extend `lsp-mode' by integrating additional language servers for specifi
     (add-to-list 'lsp-language-id-configuration '(".*\\.erb$" . "html")) ;; Associate ERB files with HTML.
     :init
     (setq lsp-tailwindcss-add-on-mode t))
-  
+
 #+end_src
 
 **** Markdown
@@ -1058,7 +1085,7 @@ Markdown Mode provides support for editing Markdown files in Emacs, enabling fea
     (add-hook 'text-mode-hook 'visual-fill-column-mode)
     (add-hook 'text-mode-hook (lambda ()
                               (setq-local visual-fill-column-center-text t)
-  			      (setq visual-fill-column-width 120)))
+                              (setq visual-fill-column-width 120)))
 
 
 #+end_src
@@ -1088,7 +1115,7 @@ Example in the wild: This is an example of a real-world issue often faced by dev
       '(add-hook 'typescriptreact-mode-hook #'add-node-modules-path))
     (eval-after-load 'js-mode
       '(add-hook 'js-mode-hook #'add-node-modules-path)))
-  
+
 #+end_src
 
 **** Python
@@ -1102,7 +1129,7 @@ Example in the wild: This is an example of a real-world issue often faced by dev
     :hook (python-mode . (lambda ()
                             (require 'lsp-pyright)
                             (lsp))))  ; or lsp-deferred
-  
+
 #+end_src
 
 *** Version Control
@@ -1156,7 +1183,7 @@ But don't worry, you can always use `M-x command' :)
                 ("C-c ^ l" . smerge-keep-lower)  ;; Keep the changes from the lower version.
                 ("C-c ^ n" . smerge-next)        ;; Move to the next conflict.
                 ("C-c ^ p" . smerge-previous)))  ;; Move to the previous conflict.
-  
+
 #+end_src
 
 **** Magit
@@ -1171,7 +1198,7 @@ In the Neovim ecosystem, similar functionality is provided by plugins such as `f
     :ensure t
     :straight t
     :defer t)
-  
+
 #+end_src
 
 *** iSearch / Diff-HL
@@ -1180,7 +1207,7 @@ In this configuration, we're setting up isearch, Emacs's incremental search feat
 
 - `C-s' to initiate a forward search
 - `C-r' to initiate a backward search
-  
+
 The following settings enhance the isearch experience:
 
 #+begin_src emacs-lisp
@@ -1194,7 +1221,7 @@ The following settings enhance the isearch experience:
     (setq search-whitespace-regexp ".*?")        ;; Allow searching across whitespace.
     :bind (("C-s" . isearch-forward)             ;; Bind C-s to forward isearch.
            ("C-r" . isearch-backward)))          ;; Bind C-r to backward isearch.
-  
+
 #+end_src
 
 The `diff-hl' package provides visual indicators for version control changes directly in the margin of the buffer, showing lines added, deleted, or changed. This is useful for tracking modifications while you edit files. When enabled, it automatically activates in every buffer that has a corresponding version control backend, offering a seamless experience.
@@ -1219,7 +1246,7 @@ In comparison, Neovim users often rely on plugins like `gitsigns.nvim' or `vim-s
                                     (change . "│")
                                     (unknown . "?")
                                     (ignored . "i"))))
-  
+
 #+end_src
 
 ** ORG Mode
@@ -1232,7 +1259,7 @@ First some functions to improve the visual aspect of org mode by centering text 
 
   (defun mb/org-mode-visual-fill ()
   (setq visual-fill-column-width 120
-  		visual-fill-column-center-text t)
+                visual-fill-column-center-text t)
   (visual-fill-column-mode 1))
 
   (defun mb/org-mode-setup ()
@@ -1247,28 +1274,38 @@ First some functions to improve the visual aspect of org mode by centering text 
 
 #+end_src
 
-Next, load the actual org package. This package is built-in, so no need to fetch it.
+Next, load the actual org package. This package is built-in, so no need to fetch it. Furthermore, I'll add some templates enable you to type things like <el and then hit Tab to expand the template. More documentation can be found at the Org Mode Easy Templates documentation page.
 
 #+begin_src emacs-lisp
 
-  (use-package org
-    :ensure nil     
-    :defer t       ;; Defer loading Org-mode until it's needed.
-    :hook (org-mode . mb/org-mode-setup)
-    :config
-  	(setq org-ellipsis " ▾"
-  			org-hide-emphasis-markers t
-  			org-src-fontify-natively nil
-  			;; org-fontify-quote-and-verse-blocks t
-  			;; org-src-tab-acts-natively t
-  			org-edit-src-content-indentation 2
-  			;; org-hide-block-startup nil
-  			;; org-src-preserve-indentation nil
-  			org-startup-folded 'content
-  			org-cycle-separator-lines 2))
-  
+    (use-package org
+      :ensure nil
+      :defer t       ;; Defer loading Org-mode until it's needed.
+      :hook (org-mode . mb/org-mode-setup)
+      :config
+        (setq org-ellipsis " ▾"
+                        org-hide-emphasis-markers t
+                        org-src-fontify-natively nil
+                        ;; org-fontify-quote-and-verse-blocks t
+                        ;; org-src-tab-acts-natively t
+                        org-edit-src-content-indentation 2
+                        ;; org-hide-block-startup nil
+                        ;; org-src-preserve-indentation nil
+                        org-startup-folded 'content
+                        org-cycle-separator-lines 2))
+
+      ;; This is needed as of Org 9.2
+      (require 'org-tempo)
+
+      (add-to-list 'org-structure-template-alist '("sh" . "src sh"))
+      (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+      (add-to-list 'org-structure-template-alist '("ni" . "src nix"))
+      (add-to-list 'org-structure-template-alist '("py" . "src python"))
+      (add-to-list 'org-structure-template-alist '("r"  . "src rust"))
+
 #+end_src
 
+*** Journal
 I usually journal in Obsidian, but really like the writing experience in Emacs. Therefore, I sometimes journal in Org mode using org-journal. These journal pages get exported to obsidian with a little python script I wrote. This script gets executed daily using Systemd Timers.
 
 #+begin_src emacs-lisp
@@ -1278,9 +1315,161 @@ I usually journal in Obsidian, but really like the writing experience in Emacs. 
   :init
   :config
   (setq org-journal-dir "~/Documenten/org/journal/"
-  		org-journal-date-format "%Y-%m-%d"
-  		org-journal-file-format "%Y-%m-%d.org"))
-  
+                org-journal-date-format "%Y-%m-%d"
+                org-journal-file-format "%Y-%m-%d.org"))
+
+#+end_src
+
+*** Agenda
+Let's start with the basics and tell Emacs where to look for agenda files.
+
+#+begin_src emacs-lisp
+
+  (setq org-directory "~/Documenten/org"
+          org-roam-directory "~/Documenten/org/notes"                  ;; Needed for org-roam and deft
+          org-default-notes-file "~/Documenten/org/notes/main.org"     ;; Not sure if needed
+          org-agenda-files '("~/Documenten/org/roamnotes/Inbox.org"
+                          "~/Documenten/org/roamnotes/Praktijkopleider.org"
+                          "~/Documenten/org/roamnotes/Werkbegeleider.org"))
+          ;; org-agenda-files (list "~/Documenten/org/"))                ;; Specify files that go in the calendar
+
+  ;; Make sure everyday has a timegrid irrespective of appointments (require-timed)
+  (setq org-agenda-time-grid '((daily today weekly)
+                              (800 1000 1200 1400 1600 1800 2000)
+                                  "......" "----------------"))
+
+#+end_src
+
+And use the keybindings as described in the [[https://orgmode.org/manual/Activation.html][manual]].
+
+#+begin_src emacs-lisp
+
+  (global-set-key (kbd "C-c l") #'org-store-link)
+  (global-set-key (kbd "C-c a") #'org-agenda)
+  (global-set-key (kbd "C-c c") #'org-capture)
+
+#+end_src
+
+**** Refiling and archiving
+Refiling moves part of the file to another location, whereas archiving moves the item to an archive file. This file can be customized otherwise the default will be used (I think [name_of_file.org_archive]).
+
+```C-c c-x C-a  Archive```
+```C-c C-w      Refile```
+
+#+begin_src emacs-lisp
+
+  (setq org-log-done 'time
+        org-refile-targets '((org-agenda-files :maxlevel . 3))
+        org-refile-use-outline-path 'file
+        org-outline-path-complete-in-steps nil  ;; see: https://github.com/syl20bnr/spacemacs/issues/3094
+  )
+
+#+end_src
+
+**** Capture templates
+
+#+begin_src emacs-lisp
+
+  (setq org-capture-templates
+        `(("t" "Todo" entry  (file "~/Documenten/org/todo.org")
+           ,(concat "* TODO %?\n"
+                    "/Entered on/ %U"))))
+
+#+end_src
+
+**** Roam
+For configuration, see the amazing [[https://systemcrafters.net/build-a-second-brain-in-emacs/capturing-notes-efficiently/][System Crafter series]].
+
+Capture makes it possible to use templates. The default capture template looks like this:
+
+#+begin_src emacs-lisp :tangle no
+
+  '(("d" "default" plain
+     "%?"
+     :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+     :unnarrowed t))
+
+#+end_src
+
+These are the options it contains:
+"d": The “key”, a letter that you press to choose the template
+"default": The full name of the template
+plain: The type of text being inserted, always this value for note templates
+"%?": This is the text that will be inserted into the new note, can be anything!
+:if-new : The list that follows this describes how the note file will be created
+:unnarrowed t : Ensures that the full file will be displayed when captured (an Org thing)
+
+
+#+begin_src emacs-lisp
+
+    (use-package org-roam
+      :ensure t
+      :init
+      (setq org-roam-v2-ack t)
+      :custom
+      (org-roam-directory "~/Documenten/org/roamnotes")
+      (org-roam-completion-everywhere t)
+      (org-roam-dailies-capture-templates
+        '(("d" "default" entry "* %<%H:%M %p>\n %?"
+          :if-new (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))))
+        :bind (("C-c n l" . org-roam-buffer-toggle)
+             ("C-c n f" . org-roam-node-find)
+             ("C-c n i" . org-roam-node-insert)
+             :map org-mode-map
+             ("C-M-i"    . completion-at-point)
+             :map org-roam-dailies-map
+             ("Y" . org-roam-dailies-capture-yesterday)
+             ("T" . org-roam-dailies-capture-tomorrow))
+      :bind-keymap
+      ("C-c n d" . org-roam-dailies-map)
+      :config
+      (require 'org-roam-dailies) ;; Ensure the keymap is available
+      (org-roam-db-autosync-mode))
+
+      (setq org-roam-dailies-directory "journal/")
+
+#+end_src
+
+Keep an inbox for notes and tasks by using org capture. Credits to [[https://systemcrafters.net/build-a-second-brain-in-emacs/5-org-roam-hacks/][David Wilson]]!
+
+#+begin_src emacs-lisp
+
+    (defun mb/org-roam-capture-inbox ()
+    (interactive)
+    (org-roam-capture- :node (org-roam-node-create)
+        :templates '(("t" "todo")
+            ("ti" "Add TODO to inbox" plain "** TODO %?\n"
+            :if-new (file+olp "Inbox.org" ("TASKS")))
+            ("tp" "Add TODO praktijkopleider" plain "** TODO %?\n"
+            :if-new (file+olp "Praktijkopleider.org" ("TASKS")))
+            ("tw" "Add TODO Werkbegeleider" plain "** TODO %?\n"
+            :if-new (file+olp "Werkbegeleider.org" ("TASKS"))))))
+
+    (global-set-key (kbd "C-c n b") #'mb/org-roam-capture-inbox)
+
+#+end_src
+
+Org-roam UI
+
+#+begin_src emacs-lisp
+
+  (use-package websocket
+      :ensure t
+      :after org-roam)
+
+  (use-package org-roam-ui
+      :ensure t
+      :after org-roam ;; or :after org
+  ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+  ;;         a hookable mode anymore, you're advised to pick something yourself
+  ;;         if you don't care about startup time, use
+  ;;  :hook (after-init . org-roam-ui-mode)
+      :config
+      (setq org-roam-ui-sync-theme t
+            org-roam-ui-follow t
+            org-roam-ui-update-on-save t
+            org-roam-ui-open-on-start t))
+
 #+end_src
 
 ** Various Programs
@@ -1298,7 +1487,7 @@ While this kickstarter focuses on essential configurations, I wanted to present 
     (erc-hide-list '("JOIN" "PART" "QUIT"))                          ;; Hide messages for joins, parts, and quits to reduce clutter.
     (erc-timestamp-format "[%H:%M]")                                 ;; Format for timestamps in messages.
     (erc-autojoin-channels-alist '((".*\\.libera\\.chat" "#emacs"))));; Automatically join the #emacs channel on Libera.Chat.
-  
+
 #+end_src
 
 *** Dotenv
@@ -1311,6 +1500,5 @@ A simple major mode to provide .env files with color highlighting
     :straight t
     :ensure t
     :config)
-  
-#+end_src
 
+#+end_src
