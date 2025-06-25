@@ -4,6 +4,11 @@
 
 ;; (require 'buffer-move)   ;; Buffer-move for better window management
 
+(global-set-key (kbd "C-c <left>")  'windmove-left)
+(global-set-key (kbd "C-c <right>") 'windmove-right)
+(global-set-key (kbd "C-c <up>")    'windmove-up)
+(global-set-key (kbd "C-c <down>")  'windmove-down)
+
 (use-package emacs
   :ensure nil
   :custom                                         ;; Set custom variables to configure Emacs behavior.
@@ -70,7 +75,7 @@
   (recentf-mode 1)             ;; Enable tracking of recently opened files.
   (savehist-mode 1)            ;; Enable saving of command history.
   (save-place-mode 1)          ;; Enable saving the place in files for easier return.
-  (winner-mode 1)              ;; Enable winner mode to easily undo window configuration changes.
+  (winner-mode 0)              ;; Enable winner mode to easily undo window configuration changes.
   (xterm-mouse-mode 1)         ;; Enable mouse support in terminal mode.
   (file-name-shadow-mode 1)    ;; Enable shadowing of filenames for clarity.
 
@@ -127,6 +132,11 @@
 (set-face-attribute 'variable-pitch nil :family "Iosevka Aile" :height 100)
 ;; (set-face-attribute 'org-modern-symbol nil :family "Iosevka")
 
+(use-package rainbow-delimiters
+  :defer t
+  :hook
+  (prog-mode . rainbow-delimiters-mode))
+
 (use-package which-key
   :init
     (which-key-mode 1)
@@ -162,7 +172,11 @@
   (general-create-definer mb/programming-key-def
   :keymaps '(lsp-mode-map)
   :prefix "SPC")
-  
+
+;; Various
+(mb/leader-key-def
+  "."       '(embark-act                      :which-key "Prompt for action"))
+
 ;; Buffer Management
 (mb/leader-key-def
   "b"       '(:ignore t                       :which-key "Buffer")
@@ -518,6 +532,9 @@
 (push "~/.config/private" load-path)
 (require 'org-gcal-credentials)
 
+;; Avoid getting prompted all the time
+;; (setq plstore-cache-passphrase-for-symmetric-encryption t)
+
 (use-package lsp-mode
    :ensure t
    :defer t
@@ -646,6 +663,24 @@
 (use-package magit
   :after transient
   :defer t)
+
+(use-package undo-tree
+    :demand t
+    :init
+    (setq undo-tree-visualizer-timestamps t
+	undo-tree-visualizer-diff t
+	;; Increase undo limits to avoid losing history due to Emacs' garbage collection.
+	;; These values can be adjusted based on your needs.
+	;; 10X bump of the undo limits to avoid issues with premature
+	;; Emacs GC which truncates the undo history very aggressively.
+	undo-limit 800000                     ;; Limit for undo entries.
+	undo-strong-limit 12000000            ;; Strong limit for undo entries.
+	undo-outer-limit 120000000)           ;; Outer limit for undo entries.
+    :config
+	(global-undo-tree-mode 1)
+    ;; Set the directory where `undo-tree' will save its history files.
+    ;; This keeps undo history across sessions, stored in a cache directory.
+    (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/.cache/undo"))))
 
 (use-package elfeed
   :config
