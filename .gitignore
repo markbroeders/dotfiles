@@ -15,6 +15,7 @@ emacs/.lsp-session
 emacs/oauth2-auto.plist
 emacs/org-roam.db
 emacs/.org*
+emacs/oauth2-auto-plist
 emacs/persist/
 emacs/places
 emacs/recentf
