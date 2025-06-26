@@ -5,13 +5,14 @@
 * TABLE OF CONTENTS :TOC:
 - [[#introduction][INTRODUCTION]]
 - [[#basics][BASICS]]
-  - [[#package-and-buffer-management][Package and Buffer management]]
+  - [[#package-buffer-and-window-management][Package, Buffer and Window management]]
   - [[#sane-defaults][Sane Defaults]]
 - [[#appearance][APPEARANCE]]
   - [[#icons][Icons]]
   - [[#theme][Theme]]
   - [[#modeline][Modeline]]
   - [[#fonts][Fonts]]
+  - [[#rainbow-delimiters][Rainbow Delimiters]]
 - [[#keyboard][KEYBOARD]]
   - [[#which-key][Which Key]]
   - [[#general][General]]
@@ -42,12 +43,13 @@
   - [[#languages][Languages]]
   - [[#version-control][Version Control]]
 - [[#applications][APPLICATIONS]]
+  - [[#undo-tree][Undo Tree]]
   - [[#elfeed][Elfeed]]
 
 * INTRODUCTION
 * BASICS
 To keep this configuration at a reasonable length, I'll move some parts of the configuration that I do not have to update often to a seperate directory. Here, I add this script directory to the load path.
-** Package and Buffer management
+** Package, Buffer and Window management
 *** Adding the scripts directory to path
 #+begin_src emacs-lisp
 (add-to-list 'load-path "~/.dotfiles/emacs/scripts/")
@@ -58,6 +60,16 @@ To keep this configuration at a reasonable length, I'll move some parts of the c
   (require 'elpaca-setup)  ;; The Elpaca Package Manager
 
   ;; (require 'buffer-move)   ;; Buffer-move for better window management
+#+end_src
+
+*** Windmove for window navigation
+#+begin_src emacs-lisp
+
+  (global-set-key (kbd "C-c <left>")  'windmove-left)
+  (global-set-key (kbd "C-c <right>") 'windmove-right)
+  (global-set-key (kbd "C-c <up>")    'windmove-up)
+  (global-set-key (kbd "C-c <down>")  'windmove-down)
+  
 #+end_src
 
 ** Sane Defaults
@@ -131,7 +143,7 @@ Here are some sane default settings, read the comments to see what they all mean
     (recentf-mode 1)             ;; Enable tracking of recently opened files.
     (savehist-mode 1)            ;; Enable saving of command history.
     (save-place-mode 1)          ;; Enable saving the place in files for easier return.
-    (winner-mode 1)              ;; Enable winner mode to easily undo window configuration changes.
+    (winner-mode 0)              ;; Enable winner mode to easily undo window configuration changes.
     (xterm-mouse-mode 1)         ;; Enable mouse support in terminal mode.
     (file-name-shadow-mode 1)    ;; Enable shadowing of filenames for clarity.
 
@@ -216,6 +228,17 @@ The `doom-modeline' package provides a sleek, modern mode-line that is visually 
   
 #+end_src
 
+** Rainbow Delimiters
+The `rainbow-delimiters' package provides colorful parentheses, brackets, and braces to enhance readability in programming modes. Each level of nested delimiter is assigned a different color, making it easier to match pairs visually.
+
+#+begin_src emacs-lisp
+
+  (use-package rainbow-delimiters
+    :defer t
+    :hook
+    (prog-mode . rainbow-delimiters-mode))
+  
+#+end_src
 * KEYBOARD
 ** Which Key
 `which-key' is an Emacs package that displays available keybindings in a popup window whenever you partially type a key sequence. This is particularlyuseful for discovering commands and shortcuts, making it easier to learn Emacs and improve your workflow. It helps users remember key combinations and reduces the cognitive load of memorizing every command.
@@ -264,7 +287,11 @@ The `doom-modeline' package provides a sleek, modern mode-line that is visually 
     (general-create-definer mb/programming-key-def
     :keymaps '(lsp-mode-map)
     :prefix "SPC")
-    
+
+  ;; Various
+  (mb/leader-key-def
+    "."       '(embark-act                      :which-key "Prompt for action"))
+
   ;; Buffer Management
   (mb/leader-key-def
     "b"       '(:ignore t                       :which-key "Buffer")
@@ -328,7 +355,7 @@ The `doom-modeline' package provides a sleek, modern mode-line that is visually 
     "e u"     '(elfeed-update                   :which-key "Update feeds")
     "e b"     '(elfeed-search-browse-url        :which-key "Open in browser"))
     )
-  
+
 #+end_src
 
 ** Evil / VIM motions everywhere
@@ -559,8 +586,7 @@ Embark-Consult provides a bridge between Embark and Consult, ensuring that Consu
 #+end_src
 
 ** NEEDED? Consult
-Consult provides powerful completion and narrowing commands for Emacs. It integrates well with other completion frameworks like Vertico, enabling features like previews and enhanced register management. It's useful for
-navigating buffers, files, and xrefs with ease.
+Consult provides powerful completion and narrowing commands for Emacs. It integrates well with other completion frameworks like Vertico, enabling features like previews and enhanced register management. It's useful for navigating buffers, files, and xrefs with ease.
 
 #+begin_src emacs-lisp :tangle no
 
@@ -852,6 +878,9 @@ Set up a 1-way sync using org-gcal-fetch
   (push "~/.config/private" load-path)
   (require 'org-gcal-credentials)
 
+  ;; Avoid getting prompted all the time
+  (setq plstore-cache-passphrase-for-symmetric-encryption t)
+
 #+end_src
 
 *** Org noter and PDF
@@ -1124,6 +1153,31 @@ In the Neovim ecosystem, similar functionality is provided by plugins such as `f
 #+end_src
 
 * APPLICATIONS
+** Undo Tree
+The `undo-tree' package provides an advanced and visual way to manage undo history. It allows you to navigate and visualize your undo history as a tree structure, making it easier to manage changes in your buffers.
+
+#+begin_src emacs-lisp
+
+  (use-package undo-tree
+      :demand t
+      :init
+      (setq undo-tree-visualizer-timestamps t
+  	undo-tree-visualizer-diff t
+  	;; Increase undo limits to avoid losing history due to Emacs' garbage collection.
+  	;; These values can be adjusted based on your needs.
+  	;; 10X bump of the undo limits to avoid issues with premature
+  	;; Emacs GC which truncates the undo history very aggressively.
+  	undo-limit 800000                     ;; Limit for undo entries.
+  	undo-strong-limit 12000000            ;; Strong limit for undo entries.
+  	undo-outer-limit 120000000)           ;; Outer limit for undo entries.
+      :config
+  	(global-undo-tree-mode 1)
+      ;; Set the directory where `undo-tree' will save its history files.
+      ;; This keeps undo history across sessions, stored in a cache directory.
+      (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/.cache/undo"))))
+
+      #+end_src
+
 ** Elfeed
 An RSS newsfeed reader for Emacs.  Move through the articles with 'j/k'.  Move through the stories with 'CTRL j/k' when in other frame.
 

@@ -533,7 +533,7 @@
 (require 'org-gcal-credentials)
 
 ;; Avoid getting prompted all the time
-;; (setq plstore-cache-passphrase-for-symmetric-encryption t)
+(setq plstore-cache-passphrase-for-symmetric-encryption t)
 
 (use-package lsp-mode
    :ensure t
