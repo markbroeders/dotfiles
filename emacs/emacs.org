@@ -43,6 +43,7 @@
   - [[#syntax][Syntax]]
   - [[#languages][Languages]]
   - [[#version-control][Version Control]]
+  - [[#project-management][Project Management]]
 - [[#applications][APPLICATIONS]]
   - [[#undo-tree][Undo Tree]]
   - [[#elfeed][Elfeed]]
@@ -302,7 +303,7 @@ The `rainbow-delimiters' package provides colorful parentheses, brackets, and br
 
     (general-create-definer mb/programming-key-def
     :keymaps '(lsp-mode-map)
-    :prefix "SPC")
+    :prefix "C-SPC")
 
   ;; Various
   (mb/leader-key-def
@@ -348,6 +349,13 @@ The `rainbow-delimiters' package provides colorful parentheses, brackets, and br
     "o r f"   '(org-roam-node-find              :which-key "Org roam find node")
     "o r i"   '(org-roam-node-insert            :which-key "Org roam insert node"))
 
+  (mb/leader-key-def
+    "p"   '(:ignore t                  :which-key "Projectile")
+    "pf"  'projectile-find-file
+    "pp"  'projectile-switch-project
+    "pF"  'consult-ripgrep
+    "pd"  'projectile-dired)
+  
   ;; LSP mode / Programming
   (mb/programming-key-def
     "p"       '(:ignore t                       :which-key "Programming")
@@ -694,21 +702,22 @@ Tell org where to look for certain documents.
 
 #+begin_src emacs-lisp
 
-  (setq org-directory "~/Documenten/org"
-          org-roam-directory "~/Documenten/org/notes"                  ;; Needed for org-roam and deft
-          org-default-notes-file "~/Documenten/org/notes/main.org"     ;; Not sure if needed
-          org-agenda-files '("~/Documenten/org/roamnotes/Inbox.org"
-  			"~/Documenten/org/roamnotes/Inbox.org_archive" ;; Just to show old items in agenda
-                          "~/Documenten/org/roamnotes/Praktijkopleider.org"
-                          "~/Documenten/org/roamnotes/Agenda.org"
-  			"~/Documenten/org/roamnotes/Calendar.org"
-                          "~/Documenten/org/roamnotes/Werkbegeleider.org"))
-          ;; org-agenda-files (list "~/Documenten/org/"))                ;; Specify files that go in the calendar
+    (setq org-directory "~/Documenten/org"
+            org-roam-directory "~/Documenten/org/notes"                  ;; Needed for org-roam and deft
+            org-default-notes-file "~/Documenten/org/notes/main.org"     ;; Not sure if needed
+            org-agenda-files '("~/Documenten/org/roamnotes/Inbox.org"
+    			       "~/Documenten/org/roamnotes/inbox-mobile.org"  ;; Sync tasks from mobile
+  						     "~/Documenten/org/roamnotes/Inbox.org_archive" ;; Just to show old items in agenda
+                               "~/Documenten/org/roamnotes/Praktijkopleider.org"
+                               "~/Documenten/org/roamnotes/Agenda.org"
+    			       "~/Documenten/org/roamnotes/Calendar.org"      ;; Google Calendar Family
+                               "~/Documenten/org/roamnotes/Werkbegeleider.org"))
+            ;; org-agenda-files (list "~/Documenten/org/"))                ;; Specify files that go in the calendar
 
-  ;; Make sure everyday has a timegrid irrespective of appointments (require-timed)
-  (setq org-agenda-time-grid '((daily today weekly)
-                              (800 1000 1200 1400 1600 1800 2000)
-                                  "......" "----------------"))
+    ;; Make sure everyday has a timegrid irrespective of appointments (require-timed)
+    (setq org-agenda-time-grid '((daily today weekly)
+                                (800 1000 1200 1400 1600 1800 2000)
+                                    "......" "----------------"))
 
 #+end_src
 
@@ -902,62 +911,134 @@ Set up a 1-way sync using org-gcal-fetch
 *** Org noter and PDF
 See [[https://github.com/fuxialexander/org-pdftools][this repo]]
 
+#+begin_src emacs-lisp
+
+    (use-package pdf-tools
+      ;; :defer t
+      :commands (pdf-loader-install)
+      :mode "\\.pdf\\'"
+      :bind (:map pdf-view-mode-map
+    			  ("j" . pdf-view-next-line-or-next-page)
+    			  ("k" . pdf-view-previous-line-or-previous-page)
+    			  ("C-=" . pdf-view-enlarge)
+    			  ("C--" . pdf-view-shrink))
+      :init (pdf-loader-install)
+      :config (add-to-list 'revert-without-query ".pdf"))
+
+    (add-hook 'pdf-view-mode-hook #'(lambda () (interactive) (display-line-numbers-mode -1)))
+
+    ;; Requiered for org-noter
+    (use-package djvu)    ;; 
+    (use-package nov)     ;; For epubs
+
+    (use-package org-noter)
+    (setq org-noter-highlight-selected-text t)
+
+    (use-package org-pdftools
+      :hook (org-mode . org-pdftools-setup-link))
+
+  (defun org-noter--get-location-top (location)
+    "Get the top coordinate given a LOCATION.
+  ... when LOCATION has form (page top . left) or (page . top)."
+    (cond
+     ((org-noter-pdftools--location-p location) 0)
+     ((listp (cdr location)) (cadr location))
+     (t (cdr location))))
+
+  (defun org-noter--get-location-page (location)
+    "Get the page number given a LOCATION of form (page top . left) or (page . top)."
+    (if (listp location)
+        (car location)
+      location))
+
+  (defun org-noter--get-location-left (location)
+    "Get the left coordinate given a LOCATION.
+  ... when LOCATION has form (page top . left) or (page . top).  If
+  later form of vector is passed return 0."
+    (cond
+     ((org-noter-pdftools--location-p location) 0)
+     ((listp (cdr location))
+      (if (listp (cddr location))
+          (caddr location)
+        (cddr location)))
+     (t 0)))
+#+end_src
+
 #+begin_src emacs-lisp :tangle no
+   
+  (use-package pdf-tools
+    ;; :defer t
+    :commands (pdf-loader-install)
+    :mode "\\.pdf\\'"
+    :bind (:map pdf-view-mode-map
+  			  ("j" . pdf-view-next-line-or-next-page)
+  			  ("k" . pdf-view-previous-line-or-previous-page)
+  			  ("C-=" . pdf-view-enlarge)
+  			  ("C--" . pdf-view-shrink))
+    :init (pdf-loader-install)
+    :config (add-to-list 'revert-without-query ".pdf"))
+
+  (add-hook 'pdf-view-mode-hook #'(lambda () (interactive) (display-line-numbers-mode -1)))
+
+  ;; Requiered for org-noter
+  (use-package djvu)    ;; 
+  (use-package nov)     ;; For epubs
+
   (use-package org-noter
-    :config
-    (require 'org-noter-pdftools))
+      :config
+      (require 'org-noter-pdftools))
 
-  (use-package org-pdftools
-    :hook (org-mode . org-pdftools-setup-link))
+    (use-package org-pdftools
+      :hook (org-mode . org-pdftools-setup-link))
 
-  (use-package org-noter-pdftools
-    :after org-noter
-    :config
-    ;; Add a function to ensure precise note is inserted
-    (defun org-noter-pdftools-insert-precise-note (&optional toggle-no-questions)
-      (interactive "P")
-      (org-noter--with-valid-session
-       (let ((org-noter-insert-note-no-questions (if toggle-no-questions
-                                                     (not org-noter-insert-note-no-questions)
-                                                   org-noter-insert-note-no-questions))
-             (org-pdftools-use-isearch-link t)
-             (org-pdftools-use-freepointer-annot t))
-         (org-noter-insert-note (org-noter--get-precise-info)))))
+    (use-package org-noter-pdftools
+      :after org-noter
+      :config
+      ;; Add a function to ensure precise note is inserted
+      (defun org-noter-pdftools-insert-precise-note (&optional toggle-no-questions)
+        (interactive "P")
+        (org-noter--with-valid-session
+         (let ((org-noter-insert-note-no-questions (if toggle-no-questions
+                                                       (not org-noter-insert-note-no-questions)
+                                                     org-noter-insert-note-no-questions))
+               (org-pdftools-use-isearch-link t)
+               (org-pdftools-use-freepointer-annot t))
+           (org-noter-insert-note (org-noter--get-precise-info)))))
 
-    ;; fix https://github.com/weirdNox/org-noter/pull/93/commits/f8349ae7575e599f375de1be6be2d0d5de4e6cbf
-    (defun org-noter-set-start-location (&optional arg)
-      "When opening a session with this document, go to the current location.
-  With a prefix ARG, remove start location."
-      (interactive "P")
-      (org-noter--with-valid-session
-       (let ((inhibit-read-only t)
-             (ast (org-noter--parse-root))
-             (location (org-noter--doc-approx-location (when (called-interactively-p 'any) 'interactive))))
-         (with-current-buffer (org-noter--session-notes-buffer session)
-           (org-with-wide-buffer
-            (goto-char (org-element-property :begin ast))
-            (if arg
-                (org-entry-delete nil org-noter-property-note-location)
-              (org-entry-put nil org-noter-property-note-location
-                             (org-noter--pretty-print-location location))))))))
-    (with-eval-after-load 'pdf-annot
-      (add-hook 'pdf-annot-activate-handler-functions #'org-noter-pdftools-jump-to-note)))
+      ;; fix https://github.com/weirdNox/org-noter/pull/93/commits/f8349ae7575e599f375de1be6be2d0d5de4e6cbf
+      (defun org-noter-set-start-location (&optional arg)
+        "When opening a session with this document, go to the current location.
+    With a prefix ARG, remove start location."
+        (interactive "P")
+        (org-noter--with-valid-session
+         (let ((inhibit-read-only t)
+               (ast (org-noter--parse-root))
+               (location (org-noter--doc-approx-location (when (called-interactively-p 'any) 'interactive))))
+           (with-current-buffer (org-noter--session-notes-buffer session)
+             (org-with-wide-buffer
+              (goto-char (org-element-property :begin ast))
+              (if arg
+                  (org-entry-delete nil org-noter-property-note-location)
+                (org-entry-put nil org-noter-property-note-location
+                               (org-noter--pretty-print-location location))))))))
+      (with-eval-after-load 'pdf-annot
+        (add-hook 'pdf-annot-activate-handler-functions #'org-noter-pdftools-jump-to-note)))
 
-  ;; See: https://github.com/fuxialexander/org-pdftools/issues/110
-  (defalias 'find-if 'cl-find-if)
-  (defalias 'getf 'cl-getf)
+    ;; See: https://github.com/fuxialexander/org-pdftools/issues/110
+    (defalias 'find-if 'cl-find-if)
+    (defalias 'getf 'cl-getf)
 
-  ;; See: https://github.com/fuxialexander/org-pdftools/issues/96
-  ;; Added patch function
-    (defun org-noter--check-and-convert-location (location)
-    "If the location is an org-noter-pdftools-location, it transforms 
-    it into a (page . height) cons, otherwise it keeps the cons
-    unaltered"
-    (if (org-noter-pdftools--location-p location)
-  	(cons (org-noter-pdftools--location-page location)
-  		(org-noter-pdftools--location-height location))
-  	location))
-  
+    ;; See: https://github.com/fuxialexander/org-pdftools/issues/96
+    ;; Added patch function
+      (defun org-noter--check-and-convert-location (location)
+      "If the location is an org-noter-pdftools-location, it transforms 
+      it into a (page . height) cons, otherwise it keeps the cons
+      unaltered"
+      (if (org-noter-pdftools--location-p location)
+    	(cons (org-noter-pdftools--location-page location)
+    		(org-noter-pdftools--location-height location))
+    	location))
+
 #+end_src
 
 * PROGRAMMING
@@ -1034,6 +1115,15 @@ NOTE: To install or reinstall an LSP server, use `M-x install-server RET`.
      (let ((help-buffer "*lsp-help*"))
        (when (get-buffer help-buffer)
          (switch-to-buffer-other-window help-buffer))))
+#+end_src
+
+#+begin_src emacs-lisp
+
+  (use-package lsp-ui
+    :hook (lsp-mode . lsp-ui-mode)
+    :custom
+    (lsp-ui-sideline-show-hover))
+
 #+end_src
 
 ** Documentation
@@ -1147,9 +1237,16 @@ Example in the wild: This is an example of a real-world issue often faced by dev
     :ensure t
     :custom (lsp-pyright-langserver-command "pyright") ;; or basedpyright
     :hook (python-mode . (lambda ()
-                            (require 'lsp-pyright)
-                            (lsp))))  ; or lsp-deferred
+  			(require 'lsp-pyright)
+  			(lsp))))  ; or lsp-deferred
 
+  ;; ELPY
+  ;; Elpy will automatically provide code completion, syntax error highlighting and
+  ;; code hinting (in the modeline) for python files. Elpy offers a lot of features.
+  (use-package elpy
+    :init
+    (elpy-enable))
+  
 #+end_src
 
 ** Version Control
@@ -1165,6 +1262,20 @@ In the Neovim ecosystem, similar functionality is provided by plugins such as `f
   (use-package magit
     :after transient
     :defer t)
+
+#+end_src
+
+** Project Management
+
+#+begin_src emacs-lisp
+  
+  (use-package projectile
+    :config (projectile-mode)
+    :demand t
+    :init
+    (setq projectile-project-search-path (list "~/Development/python/projects"
+                                               "~/Development/python/exercises"
+                                               "~/.dotfiles")))
 
 #+end_src
 

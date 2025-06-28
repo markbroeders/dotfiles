@@ -179,7 +179,7 @@
 
   (general-create-definer mb/programming-key-def
   :keymaps '(lsp-mode-map)
-  :prefix "SPC")
+  :prefix "C-SPC")
 
 ;; Various
 (mb/leader-key-def
@@ -224,6 +224,13 @@
   "o r"     '(:ignore t                       :which-key "Roam")
   "o r f"   '(org-roam-node-find              :which-key "Org roam find node")
   "o r i"   '(org-roam-node-insert            :which-key "Org roam insert node"))
+
+(mb/leader-key-def
+  "p"   '(:ignore t                  :which-key "Projectile")
+  "pf"  'projectile-find-file
+  "pp"  'projectile-switch-project
+  "pF"  'consult-ripgrep
+  "pd"  'projectile-dired)
 
 ;; LSP mode / Programming
 (mb/programming-key-def
@@ -411,11 +418,12 @@
         org-roam-directory "~/Documenten/org/notes"                  ;; Needed for org-roam and deft
         org-default-notes-file "~/Documenten/org/notes/main.org"     ;; Not sure if needed
         org-agenda-files '("~/Documenten/org/roamnotes/Inbox.org"
-			"~/Documenten/org/roamnotes/Inbox.org_archive" ;; Just to show old items in agenda
-                        "~/Documenten/org/roamnotes/Praktijkopleider.org"
-                        "~/Documenten/org/roamnotes/Agenda.org"
-			"~/Documenten/org/roamnotes/Calendar.org"
-                        "~/Documenten/org/roamnotes/Werkbegeleider.org"))
+			       "~/Documenten/org/roamnotes/inbox-mobile.org"  ;; Sync tasks from mobile
+						     "~/Documenten/org/roamnotes/Inbox.org_archive" ;; Just to show old items in agenda
+                           "~/Documenten/org/roamnotes/Praktijkopleider.org"
+                           "~/Documenten/org/roamnotes/Agenda.org"
+			       "~/Documenten/org/roamnotes/Calendar.org"      ;; Google Calendar Family
+                           "~/Documenten/org/roamnotes/Werkbegeleider.org"))
         ;; org-agenda-files (list "~/Documenten/org/"))                ;; Specify files that go in the calendar
 
 ;; Make sure everyday has a timegrid irrespective of appointments (require-timed)
@@ -543,6 +551,56 @@
 ;; Avoid getting prompted all the time
 (setq plstore-cache-passphrase-for-symmetric-encryption t)
 
+(use-package pdf-tools
+    ;; :defer t
+    :commands (pdf-loader-install)
+    :mode "\\.pdf\\'"
+    :bind (:map pdf-view-mode-map
+  			  ("j" . pdf-view-next-line-or-next-page)
+  			  ("k" . pdf-view-previous-line-or-previous-page)
+  			  ("C-=" . pdf-view-enlarge)
+  			  ("C--" . pdf-view-shrink))
+    :init (pdf-loader-install)
+    :config (add-to-list 'revert-without-query ".pdf"))
+
+  (add-hook 'pdf-view-mode-hook #'(lambda () (interactive) (display-line-numbers-mode -1)))
+
+  ;; Requiered for org-noter
+  (use-package djvu)    ;; 
+  (use-package nov)     ;; For epubs
+
+  (use-package org-noter)
+  (setq org-noter-highlight-selected-text t)
+
+  (use-package org-pdftools
+    :hook (org-mode . org-pdftools-setup-link))
+
+(defun org-noter--get-location-top (location)
+  "Get the top coordinate given a LOCATION.
+... when LOCATION has form (page top . left) or (page . top)."
+  (cond
+   ((org-noter-pdftools--location-p location) 0)
+   ((listp (cdr location)) (cadr location))
+   (t (cdr location))))
+
+(defun org-noter--get-location-page (location)
+  "Get the page number given a LOCATION of form (page top . left) or (page . top)."
+  (if (listp location)
+      (car location)
+    location))
+
+(defun org-noter--get-location-left (location)
+  "Get the left coordinate given a LOCATION.
+... when LOCATION has form (page top . left) or (page . top).  If
+later form of vector is passed return 0."
+  (cond
+   ((org-noter-pdftools--location-p location) 0)
+   ((listp (cdr location))
+    (if (listp (cddr location))
+        (caddr location)
+      (cddr location)))
+   (t 0)))
+
 (use-package lsp-mode
    :ensure t
    :defer t
@@ -605,6 +663,11 @@
      (when (get-buffer help-buffer)
        (switch-to-buffer-other-window help-buffer))))
 
+(use-package lsp-ui
+  :hook (lsp-mode . lsp-ui-mode)
+  :custom
+  (lsp-ui-sideline-show-hover))
+
 (use-package eldoc
   :ensure nil          ;; This is built-in, no need to fetch it.
   :init
@@ -663,14 +726,29 @@
   :ensure t
   :custom (lsp-pyright-langserver-command "pyright") ;; or basedpyright
   :hook (python-mode . (lambda ()
-                          (require 'lsp-pyright)
-                          (lsp))))  ; or lsp-deferred
+			(require 'lsp-pyright)
+			(lsp))))  ; or lsp-deferred
+
+;; ELPY
+;; Elpy will automatically provide code completion, syntax error highlighting and
+;; code hinting (in the modeline) for python files. Elpy offers a lot of features.
+(use-package elpy
+  :init
+  (elpy-enable))
 
 (use-package transient)
 
 (use-package magit
   :after transient
   :defer t)
+
+(use-package projectile
+  :config (projectile-mode)
+  :demand t
+  :init
+  (setq projectile-project-search-path (list "~/Development/python/projects"
+                                             "~/Development/python/exercises"
+                                             "~/.dotfiles")))
 
 (use-package undo-tree
     :demand t
