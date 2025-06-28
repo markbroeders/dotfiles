@@ -25,3 +25,4 @@ emacs/transient/
 emacs/tree-sitter/
 manual.md
 config/nvim/.config/nvim/lazy-lock.json
+emacs/projectile-bookmarks.eld
