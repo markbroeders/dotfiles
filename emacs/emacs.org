@@ -323,13 +323,22 @@ The `rainbow-delimiters' package provides colorful parentheses, brackets, and br
     "e c"     '((lambda () (interactive)
   			  (find-file "~/.emacs.d/emacs.org"))                   :which-key "Emacs Config")
     "e i"     '((lambda () (interactive)
-  			  (find-file "~/Documenten/org/roamnotes/Inbox.org"))   :which-key "Inbox"))
+  			  (find-file "~/Documenten/org/roamnotes/Inbox.org"))   :which-key "Inbox")
+    "e j"     '(org-roam-dailies-goto-today                           :which-key "Today's Journal"))
 
   ;; File Management
   (mb/leader-key-def
     "f"       '(:ignore t                       :which-key "Files")
     "f f"     '(find-file                       :which-key "Open file")
     "f r"     '(consult-recent-file             :which-key "Recent file"))
+
+  ;; LSP mode / Programming
+  (mb/leader-key-def
+    "g"       '(:ignore t                       :which-key "Programming")
+    "g d"     '((lambda () (interactive)
+  				(mb/lsp-describe-and-jump))   :which-key "Open hover doc")
+    "g f"     '(lsp-find-references             :which-key "Find references")
+    "g r"     '(lsp-rename                      :which-key "Rename"))
 
   (mb/leader-key-def
     "h"       '(:ignore t                       :which-key "Help")
@@ -350,20 +359,12 @@ The `rainbow-delimiters' package provides colorful parentheses, brackets, and br
     "o r i"   '(org-roam-node-insert            :which-key "Org roam insert node"))
 
   (mb/leader-key-def
-    "p"   '(:ignore t                  :which-key "Projectile")
+    "p"   '(:ignore t                           :which-key "Projectile")
     "pf"  'projectile-find-file
     "pp"  'projectile-switch-project
     "pF"  'consult-ripgrep
     "pd"  'projectile-dired)
   
-  ;; LSP mode / Programming
-  (mb/programming-key-def
-    "p"       '(:ignore t                       :which-key "Programming")
-    "p d"     '((lambda () (interactive)
-  				(mb/lsp-describe-and-jump))   :which-key "Open hover doc")
-    "p f"     '(lsp-find-references             :which-key "Find references")
-    "p r"     '(lsp-rename                      :which-key "Rename"))
-
     ;; Searching
   (mb/leader-key-def
     "s"       '(:ignore t                       :which-key "Search")
