@@ -1,0 +1,7 @@
+cd ../../projects/capture-webcam-video/
+source .venv/bin/activate 
+source .venv/bin/activate
+ll
+ls
+python main.py 
+exit

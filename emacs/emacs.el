@@ -199,13 +199,22 @@
   "e c"     '((lambda () (interactive)
 			  (find-file "~/.emacs.d/emacs.org"))                   :which-key "Emacs Config")
   "e i"     '((lambda () (interactive)
-			  (find-file "~/Documenten/org/roamnotes/Inbox.org"))   :which-key "Inbox"))
+			  (find-file "~/Documenten/org/roamnotes/Inbox.org"))   :which-key "Inbox")
+  "e j"     '(org-roam-dailies-goto-today                           :which-key "Today's Journal"))
 
 ;; File Management
 (mb/leader-key-def
   "f"       '(:ignore t                       :which-key "Files")
   "f f"     '(find-file                       :which-key "Open file")
   "f r"     '(consult-recent-file             :which-key "Recent file"))
+
+;; LSP mode / Programming
+(mb/leader-key-def
+  "g"       '(:ignore t                       :which-key "Programming")
+  "g d"     '((lambda () (interactive)
+				(mb/lsp-describe-and-jump))   :which-key "Open hover doc")
+  "g f"     '(lsp-find-references             :which-key "Find references")
+  "g r"     '(lsp-rename                      :which-key "Rename"))
 
 (mb/leader-key-def
   "h"       '(:ignore t                       :which-key "Help")
@@ -226,19 +235,11 @@
   "o r i"   '(org-roam-node-insert            :which-key "Org roam insert node"))
 
 (mb/leader-key-def
-  "p"   '(:ignore t                  :which-key "Projectile")
+  "p"   '(:ignore t                           :which-key "Projectile")
   "pf"  'projectile-find-file
   "pp"  'projectile-switch-project
   "pF"  'consult-ripgrep
   "pd"  'projectile-dired)
-
-;; LSP mode / Programming
-(mb/programming-key-def
-  "p"       '(:ignore t                       :which-key "Programming")
-  "p d"     '((lambda () (interactive)
-				(mb/lsp-describe-and-jump))   :which-key "Open hover doc")
-  "p f"     '(lsp-find-references             :which-key "Find references")
-  "p r"     '(lsp-rename                      :which-key "Rename"))
 
   ;; Searching
 (mb/leader-key-def
@@ -666,7 +667,8 @@ later form of vector is passed return 0."
 (use-package lsp-ui
   :hook (lsp-mode . lsp-ui-mode)
   :custom
-  (lsp-ui-sideline-show-hover))
+  (lsp-ui-sideline-show-hover)
+	(lsp-ui-doc-enable t))
 
 (use-package eldoc
   :ensure nil          ;; This is built-in, no need to fetch it.
@@ -722,19 +724,24 @@ later form of vector is passed return 0."
   (eval-after-load 'js-mode
     '(add-hook 'js-mode-hook #'add-node-modules-path)))
 
-(use-package lsp-pyright
-  :ensure t
-  :custom (lsp-pyright-langserver-command "pyright") ;; or basedpyright
-  :hook (python-mode . (lambda ()
-			(require 'lsp-pyright)
-			(lsp))))  ; or lsp-deferred
-
-;; ELPY
-;; Elpy will automatically provide code completion, syntax error highlighting and
-;; code hinting (in the modeline) for python files. Elpy offers a lot of features.
 (use-package elpy
-  :init
-  (elpy-enable))
+    :ensure t
+    :bind
+    (:map elpy-mode-map
+          ("C-M-n" . elpy-nav-forward-block)
+          ("C-M-p" . elpy-nav-backward-block))
+    :hook ((elpy-mode . flycheck-mode)
+           (elpy-mode . (lambda ()
+                          (set (make-local-variable 'company-backends)
+                               '((elpy-company-backend :with company-yasnippet))))))
+    :init
+    (elpy-enable)
+    :config
+    (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+    ; fix for MacOS, see https://github.com/jorgenschaefer/elpy/issues/1550
+    (setq elpy-shell-echo-output nil)
+    (setq elpy-rpc-python-command "python3")
+    (setq elpy-rpc-timeout 2))
 
 (use-package transient)
 
