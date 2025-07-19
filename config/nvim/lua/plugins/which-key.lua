@@ -15,6 +15,4 @@ return {
       desc = "Buffer Local Keymaps (which-key)",
     },
   },
-  config = function ()
-  end
 }

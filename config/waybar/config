@@ -15,7 +15,8 @@
       "pulseaudio",
       "cpu",
       "power-profiles-daemon",
-      "battery"
+      "battery",
+      "tray"
     ],
     "hyprland/workspaces": {
       "on-click": "activate",
@@ -50,6 +51,10 @@
       "format": "{:%A %H:%M}",
       "format-alt": "{:%d %B W%V %Y}",
       "tooltip": false
+    },
+    "tray": {
+      "icon-size": 20,
+      "spacing": 10
     },
     "network": {
       "format-icons": ["󰤯","󰤟","󰤢","󰤥","󰤨"],

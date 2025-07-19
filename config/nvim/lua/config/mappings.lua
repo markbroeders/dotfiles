@@ -1,52 +1,104 @@
--- Mapping helper
----@param mode string
----@param key string
----@param result function | string
----@param desc? string
-local mapper = function(mode, key, result, desc) vim.keymap.set(mode, key, result, { noremap = true, silent = true, desc = desc }) end
+-- CUSTOM MAPPINGS
+-- could add a helper function, maybe in the future
 
--- Escape to normal mode using the keyboard
-mapper("i", "jj", "<Esc>")
+-- TELESCOPE
+local builtin = require("telescope.builtin")
+vim.keymap.set("n", "<leader><Space>", builtin.oldfiles, { desc = "Recent files" })
+vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Telescope find files" }) -- Find files
+-- Find files in .config
+vim.keymap.set("n", "<leader>fc", function()
+	builtin.find_files({ cwd = "~/.dotfiles/config/" })
+end, { desc = "Telescope find files" })
+-- Find python projects
+vim.keymap.set("n", "<leader>fp", function()
+	builtin.find_files({ cwd = "~/Development/python/" })
+end, { desc = "Telescope find files" })
+vim.keymap.set("n", "<leader>fb", ":Telescope file_browser<CR>") -- Search or create note
+vim.keymap.set("n", "<leader>.", builtin.buffers, { desc = "Telescope buffers" })
 
--- Neotree mappings
-mapper('n', '<leader>nt', ':Neotree filesystem reveal left<CR> ')
+-- OPEN FILES
+vim.keymap.set("n", "<leader>oi", ":e $HOME/Documenten/inbox.md<CR>", { desc = "Open Inbox" })
 
--- Telescope mappings
--- See `:help telescope.builtin`
-      local builtin = require 'telescope.builtin'
-      vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
-      vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
-      vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
-      vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
-      vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
-      vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
-      vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
-      vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
-      vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
-      vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+-- NOTE TAKING
+vim.keymap.set(
+	"n",
+	"<leader>on",
+	":Telescope file_browser path=~/Documenten/Notes/<CR>",
+	{ desc = "Search or create note" }
+) -- Search or create note
 
-      -- Slightly advanced example of overriding default behavior and theme
-      vim.keymap.set('n', '<leader>/', function()
-        -- You can pass additional configuration to Telescope to change the theme, layout, etc.
-        builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-          winblend = 10,
-          previewer = false,
-        })
-      end, { desc = '[/] Fuzzily search in current buffer' })
+-- VARIOUS
+vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle)
+-- Folding hack
+-- Somehow the folding markdown script sets folding so that when I open files
+-- most blocks are folded. This is not the behavior I want! Since I don't know
+-- how to fix this, I've disabled folding in the init.lua file. I'll bind a
+-- keybinding to enable and disable folding.
+vim.keymap.set("n", "<leader>ef", ":set foldenable<CR>", { desc = "Enable folding" })
+vim.keymap.set("n", "<leader>df", ":set nofoldenable<CR>", { desc = "Disable folding" })
+-- Formatting
+vim.keymap.set("n", "<leader>fmi", ":GuessIndent<CR>", { desc = "Indentation" })
 
-      -- It's also possible to pass additional configuration options.
-      --  See `:help telescope.builtin.live_grep()` for information about particular keys
-      vim.keymap.set('n', '<leader>s/', function()
-        builtin.live_grep {
-          grep_open_files = true,
-          prompt_title = 'Live Grep in Open Files',
-        }
-      end, { desc = '[S]earch [/] in Open Files' })
+-- PRODUCTIVITY SECTION
+-- Capture a todo
+vim.keymap.set("n", "<leader>ct", function()
+	local script = vim.fn.expand("~/.config/scripts/todo.sh")
+	require("FTerm").scratch({ cmd = "bash " .. script })
+end, { desc = "Run todo.sh in FTerm" })
+-- Toggle a checkbox
+vim.keymap.set("n", "<leader>tt", ":ToggleCheckbox<CR>", { desc = "Toggle Checkbox" })
 
-      -- Shortcut for searching your Neovim configuration files
-      vim.keymap.set('n', '<leader>sn', function()
-        builtin.find_files { cwd = vim.fn.stdpath 'config' }
-      end, { desc = '[S]earch [N]eovim files' })
+-- JOURNAL
+local journal_base = vim.fn.expand("~/Documenten/Journal")
 
--- LSP Mappings
-vim.keymap.set('n', 'K', vim.lsp.buf.hover, {})
+-- Helper functie om journal te openen
+local function open_journal(date)
+	local year = string.sub(date, 1, 4)
+	local path = journal_base .. "/" .. year
+	local filename = path .. "/" .. date .. ".md"
+
+	-- Maak de map aan als deze nog niet bestaat
+	if vim.fn.isdirectory(path) == 0 then
+		vim.fn.mkdir(path, "p")
+	end
+
+	-- Voeg header toe als bestand nog niet bestaat
+	if vim.fn.filereadable(filename) == 0 then
+		local header = "# " .. date .. "\n\n"
+		local file = io.open(filename, "w")
+		if file then
+			file:write(header)
+			file:close()
+		end
+	end
+
+	-- Voeg subheader met tijd toe bij openen
+	local current_time = os.date("%H:%M")
+	local file = io.open(filename, "a")
+	if file then
+		file:write("## " .. current_time .. "\n\n")
+		file:close()
+	end
+
+	vim.cmd("edit " .. filename)
+end
+
+-- Keymap voor journal van vandaag
+vim.keymap.set("n", "<leader>jt", function()
+	local today = os.date("%Y-%m-%d")
+	open_journal(today)
+end, { desc = "Open today's journal" })
+
+-- Keymap voor journal van gisteren
+vim.keymap.set("n", "<leader>jy", function()
+	local yesterday = os.date("%Y-%m-%d", os.time() - 86400)
+	open_journal(yesterday)
+end, { desc = "Open yesterday's journal" })
+
+-- Add a journal entry from within Neovim
+vim.keymap.set("n", "<leader>jj", function()
+	local script = vim.fn.expand("~/.config/scripts/journal.py")
+	require("FTerm").scratch({ cmd = "python " .. script })
+end, { desc = "Add journal entry from within FTerm" })
+
+-- PLAYGROUND
