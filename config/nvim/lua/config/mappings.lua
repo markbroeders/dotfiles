@@ -16,6 +16,11 @@ end, { desc = "Telescope find files" })
 vim.keymap.set("n", "<leader>fb", ":Telescope file_browser<CR>") -- Search or create note
 vim.keymap.set("n", "<leader>.", builtin.buffers, { desc = "Telescope buffers" })
 
+-- More buffer management
+vim.keymap.set("n", "<S-l>", ":bnext<CR>", { desc = "Next buffer" })
+vim.keymap.set("n", "<S-h>", ":bprevious<CR>", { desc = "Previous buffer" })
+vim.keymap.set("n", "<leader>q", ":bd<CR>", { desc = "Delete buffer" })
+
 -- OPEN FILES
 vim.keymap.set("n", "<leader>oi", ":e $HOME/Documenten/inbox.md<CR>", { desc = "Open Inbox" })
 

@@ -54,6 +54,10 @@ vim.opt.incsearch = true
 -- vim.opt.foldmethod = manual
 vim.opt.foldenable = false
 
+-- FIX: Does this help with mini surround S
+-- Set timeout to 2000ms
+vim.o.timeoutlen = 2000
+
 -- Highlight when yanking (copying) text
 --  Try it with `yap` in normal mode
 --  See `:help vim.hl.on_yank()`

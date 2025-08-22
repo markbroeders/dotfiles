@@ -1,0 +1,30 @@
+# Start with some visual basics
+theme = "catppuccin_mocha"       # Apply a nice looking theme
+
+[editor]
+cursorline = true                # Highlight lines with a cursor
+bufferline = "multiple"          # Show tabs when multiple buffers are open
+line-number = "relative"         # Show relative line numbers
+
+# Change the cursor shape depending on mode
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "underline"
+
+# CUSTOM KEYMAPPINGS
+[keys.insert]
+j = { j = "normal_mode" } # Maps 'jj' to normal mode
+
+# Create a custom minor mode, reminiscent of Emacs
+[keys.normal."C-c"]
+j = ":sh alacritty -e python ~/.config/scripts/journal.py"
+
+[keys.normal."C-c".o]
+c = ":open ~/.config/"              # Open configuration directory
+n = ":open ~/Documenten/Notes/"     # Open Notes directory
+
+[keys.normal]
+"A-z" = ":toggle soft-wrap.enable" # Test to enable line wrapping
+# F6 opens a Markdown preview in my default browser
+"F6" = "@:sh pandoc --resource-path <C-r>%<C-w> --self-contained --metadata title='Preview' <C-r>% -o /tmp/md-preview.html && xdg-open /tmp/md-preview.html<ret>"
