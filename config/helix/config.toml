@@ -17,8 +17,10 @@ select = "underline"
 j = { j = "normal_mode" } # Maps 'jj' to normal mode
 
 # Create a custom minor mode, reminiscent of Emacs
-[keys.normal."C-c"]
-j = ":sh alacritty -e python ~/.config/scripts/journal.py"
+[keys.normal."C-c".j]
+j = ":sh foot -e python3 ~/.config/scripts/journal.py"
+m = ":sh foot -e python3 ~/.config/scripts/journal.py -m"
+g = ":sh foot -e python3 ~/.config/scripts/journal.py -g"
 
 [keys.normal."C-c".o]
 c = ":open ~/.config/"              # Open configuration directory
@@ -27,4 +29,4 @@ n = ":open ~/Documenten/Notes/"     # Open Notes directory
 [keys.normal]
 "A-z" = ":toggle soft-wrap.enable" # Test to enable line wrapping
 # F6 opens a Markdown preview in my default browser
-"F6" = "@:sh pandoc --resource-path <C-r>%<C-w> --self-contained --metadata title='Preview' <C-r>% -o /tmp/md-preview.html && xdg-open /tmp/md-preview.html<ret>"
+# "F6" = "@:sh pandoc --resource-path <C-r>%<C-w> --self-contained --metadata title='Preview' <C-r>% -o /tmp/md-preview.html && xdg-open /tmp/md-preview.html<ret>"

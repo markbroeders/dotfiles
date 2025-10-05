@@ -10,3 +10,4 @@ formatter = { command = 'prettier', args = [
   "--prose-wrap",
   "never",
 ]}
+

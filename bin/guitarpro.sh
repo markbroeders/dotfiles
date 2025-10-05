@@ -1,3 +1,0 @@
-#!/usr/bin/env sh
-
-flatpak run --command=bottles-cli com.usebottles.bottles run -b "Guitar Pro" -p GuitarPro

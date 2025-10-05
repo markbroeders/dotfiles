@@ -1,0 +1,34 @@
+output "eDP-1" {
+	mode 2880x1800@120.000
+	position 0,0
+	scale 2
+	alias $LAPTOP
+}
+
+output "Dell Inc. DELL U2723QE 1P0S7P3" {
+	mode 3840x2160@59.997
+	position 0,0
+	scale 2
+	alias $DESKTOP_HOME
+}
+
+output "Hewlett Packard HP E231 3CQ43602SF" {
+	mode 1920x1080@60.000
+	position 0,0
+	scale 1
+	alias $WORK_1
+}
+
+profile default {
+	output $LAPTOP enable
+}
+
+profile werkkamer {
+	output $LAPTOP disable
+	output $DESKTOP_HOME enable
+}
+
+profile work_1 {
+	output $LAPTOP disable
+	output $WORK_1 enable
+}
