@@ -21,6 +21,7 @@ setup_oh_my_zsh() {
     git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 }
 
+# TODO Create dynamic variable for helix download
 setup_helix() {
     wget https://github.com/helix-editor/helix/releases/download/25.07.1/helix-25.07.1-source.tar.xz
     mkdir $HOME/Downloads/helix && tar -xvf helix-25.07.1-source.tar.xz -C $HOME/Downloads/helix
@@ -46,6 +47,7 @@ enable_systemd_services() {
     cp -rv $HOME/.dotfiles/config/systemd/user/kanshi.service $HOME/.config/systemd/user/
     cp -rv $HOME/.dotfiles/config/systemd/user/sway-session.target $HOME/.config/systemd/user/
 
+    # ENABLING IS NOT NECESSARY, IS IN SWAY CONFIG FILE
     # systemctl --user enable --now kanshi.service
 }
 
@@ -64,7 +66,6 @@ install_basic_packages() {
 }
 
 install_snap_packages() {
-    # WORKS
     packages=("libreoffice" "obsidian" "spotify" "marksman" "helix")
     for package in "${packages[@]}"; do
         if ! command_exists "$package"; then
@@ -81,7 +82,6 @@ miscellaneous() {
 
     # Development Tools
     sudo npm install -g prettier
-    sudo apt install python3-pylsp -y
 
     # Install some fonts
     wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/FiraCode.zip    
@@ -92,6 +92,11 @@ miscellaneous() {
     unzip $HOME/Downloads/CascadiaCode.zip -d $HOME/.local/share/fonts/CaskaydiaCove
     fc-cache -fv
     rm $HOME/Downloads/*.zip
+
+    # Autotiling Sway
+    pip install --break-system-packages i3ipc
+    mkdir -p $HOME/.local/bin
+    wget https://raw.githubusercontent.com/nwg-piotr/autotiling/master/autotiling/main.py -O $HOME/.local/bin/autotiling && chmod +x $HOME/.local/bin/autotiling
 
     sudo apt autoremove -y && sudo apt clean -y
 }
