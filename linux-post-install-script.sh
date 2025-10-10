@@ -40,6 +40,7 @@ get_config_files() {
     for config in "${config_files[@]}"; do
         cp -rv $HOME/.dotfiles/config/"$config" $HOME/.config/
     done
+    cp -rv $HOME/.dotfiles/scripts $HOME/.config/
 }
 
 enable_systemd_services() {
@@ -97,6 +98,9 @@ miscellaneous() {
     pip install --break-system-packages i3ipc
     mkdir -p $HOME/.local/bin
     wget https://raw.githubusercontent.com/nwg-piotr/autotiling/master/autotiling/main.py -O $HOME/.local/bin/autotiling && chmod +x $HOME/.local/bin/autotiling
+
+    # Set battery threshold on my laptop
+    sudo $HOME/.config/scripts/limitd.sh 80
 
     sudo apt autoremove -y && sudo apt clean -y
 }
