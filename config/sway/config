@@ -31,8 +31,8 @@ gaps outer 5
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
 # output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
-output * bg ~/Afbeeldingen/Wallpapers/Cosmic\ Beta\ NASA.jpeg fill
-# output * bg ~/Afbeeldingen/Wallpapers/minimal_blue.jpg fill
+# output * bg ~/Afbeeldingen/Wallpapers/Cosmic\ Beta\ NASA.jpeg fill
+output * bg ~/Afbeeldingen/Wallpapers/minimal.jpg fill
 # output * bg ~/Afbeeldingen/Wallpapers/background2.jpg fill
 
 #
@@ -137,11 +137,16 @@ bindgesture swipe:left workspace prev
 #
 
     # Workspace names
-    set $ws1 1:🌐
-    set $ws2 2:💻
-    set $ws3 3:🎵
-    set $ws4 4:🗃️
-    set $ws5 5:📚       
+    # set $ws1 1:🌐
+    # set $ws2 2:💻
+    # set $ws3 3:🎵
+    # set $ws4 4:🗃️
+    # set $ws5 5:📚       
+    set $ws1 1
+    set $ws2 2
+    set $ws3 3
+    set $ws4 4
+    set $ws5 5
     # Switch to workspace
     bindsym $mod+1 workspace number $ws1
     bindsym $mod+2 workspace number $ws2
@@ -172,6 +177,9 @@ bindgesture swipe:left workspace prev
 #
 for_window [app_id="foot"] border pixel
 for_window [app_id="pavucontrol"] floating enable
+for_window [app_id="blueman"] floating enable
+for_window [app_id="thunar"] floating enable
+
 # default_border none
 
 #
@@ -258,10 +266,12 @@ bindsym $mod+r mode "resize"
     bindsym $mod+w exec firefox
     bindsym $mod+e exec $term -e yazi
     bindsym $mod+Shift+v exec clipman pick --tool="wofi" --max-items=30
-    bindsym $mod+Shift+e exec nautilus
+    bindsym $mod+Shift+e exec thunar
     bindsym $mod+Shift+x exec wlogout
-    bindsym $alt+Shift+l exec swaylock -f -c 000000 
+    bindsym $alt+Shift+l exec swaylock -f -c 000000
+    bindsym $mod+i exec $term -e nmtui
 
+for_window [app_id="firefox"] inhibit_idle fullscreen
 
 # target                 title     bg    text   indicator  border
 client.focused           $lavender $base $text  $rosewater $lavender
@@ -307,11 +317,13 @@ bar {
 #
 # Start some programs
 #
-exec_always /home/mark/.local/bin/autotiling
+exec_always autotiling
 # see: https://wiki.archlinux.org/title/Sway#Manage_Sway-specific_daemons_with_systemd
 exec_always systemctl --user restart sway-session.target
 
 exec mako
 exec wl-paste -t text --watch clipman store --no-persist
+# Polkit: https://www.reddit.com/r/swaywm/comments/128ra38/polkit/
+exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 
 include /etc/sway/config.d/*
